@@ -14,8 +14,8 @@ export default function Nav({ currentPath, go }) {
     { path: '/chefs', label: 'Browse Chefs' },
     { path: '/book', label: 'Book a Chef' },
   ]
-  if (isChef) links.push({ path: '/dashboard', label: 'My Dashboard' })
-  if (!user || !isChef) links.push({ path: '/join', label: 'Register as a Chef' })
+  if (isChef || isAdmin) links.push({ path: '/dashboard', label: 'My Dashboard' })
+  if (!user || (!isChef && !isAdmin)) links.push({ path: '/join', label: 'Register as a Chef' })
   if (isAdmin) links.push({ path: '/admin', label: 'Admin' })
 
   const openAuth = (mode = 'login', role = 'client') => setAuthModal({ open: true, mode, role })
