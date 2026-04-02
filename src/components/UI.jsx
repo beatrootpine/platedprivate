@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 // ─── Logo (SVG with transparent background) ────────────────────────────────
 export const Logo = ({ size = 'md', onClick }) => {
-  const heights = { sm: 36, md: 48, lg: 72, xl: 110 }
+  const heights = { sm: 44, md: 48, lg: 72, xl: 110 }
   const h = heights[size] || heights.md
   return (
     <img
