@@ -30,7 +30,7 @@ export default function Footer({ go }) {
               {[
                 { label: 'Browse Chefs', path: '/chefs' },
                 { label: 'Book a Chef', path: '/book' },
-                { label: 'Become a Chef', path: '/join' },
+                { label: 'Register as a Chef', path: '/join' },
               ].map(l => (
                 <div key={l.path} onClick={() => go(l.path)}
                   style={{ color: 'var(--text-secondary)', fontSize: 13, marginBottom: 10, cursor: 'pointer', transition: 'color 0.2s' }}

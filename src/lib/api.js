@@ -376,3 +376,36 @@ export async function rejectDocument(docId, reviewerId, reason) {
     .single()
   return { data, error }
 }
+
+
+// ─────────────────────────────────────────────────────────────────────
+// ADMIN SETUP (claim admin access via setup key)
+// ─────────────────────────────────────────────────────────────────────
+
+export async function claimAdmin(setupKey) {
+  // Try the Supabase RPC function first
+  try {
+    const { data, error } = await supabase.rpc('claim_admin', { p_setup_key: setupKey })
+    if (!error && data?.success) return { success: true, error: null }
+    if (data?.error) return { success: false, error: data.error }
+  } catch (e) {
+    // RPC not available, try direct update with client-side key check
+  }
+
+  // Fallback: client-side key verification + direct profile update
+  const expectedKey = import.meta.env.VITE_ADMIN_SETUP_KEY
+  if (setupKey !== expectedKey) {
+    return { success: false, error: 'Invalid setup key' }
+  }
+
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session?.user) return { success: false, error: 'Please sign in first' }
+
+  const { error } = await supabase
+    .from('profiles')
+    .update({ role: 'admin' })
+    .eq('id', session.user.id)
+
+  if (error) return { success: false, error: error.message }
+  return { success: true, error: null }
+}

@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
-import { Badge, ChefAvatar, GoldButton } from '../components/UI'
+import { Badge, ChefAvatar, GoldButton, Input, Logo } from '../components/UI'
 import { MOCK_CHEFS, MOCK_BOOKINGS, PLATFORM_FEE } from '../data/constants'
 import { useAuth } from '../context/AuthContext'
-import { getAdminBookings, getAdminRevenue, getAdminChefs, suspendChef, reactivateChef, removeChef as removeChefApi } from '../lib/api'
+import { getAdminBookings, getAdminRevenue, getAdminChefs, suspendChef, reactivateChef, removeChef as removeChefApi, claimAdmin } from '../lib/api'
 import { normalizeAdminChef } from '../lib/helpers'
 
 export default function AdminDashboard() {
-  const { isAdmin } = useAuth()
+  const { user, isAdmin, refreshProfile } = useAuth()
   const [tab, setTab] = useState('deals')
   const [chefs, setChefs] = useState([])
   const [bookings, setBookings] = useState([])
@@ -76,6 +76,74 @@ export default function AdminDashboard() {
   }
 
   const statusColor = (s) => s === 'completed' ? 'green' : s === 'confirmed' ? 'blue' : 'gold'
+
+  // ─── Admin Setup Gate ──────────────────────────────────
+  const [setupKey, setSetupKey] = useState('')
+  const [setupLoading, setSetupLoading] = useState(false)
+  const [setupError, setSetupError] = useState('')
+
+  const handleAdminClaim = async () => {
+    setSetupLoading(true)
+    setSetupError('')
+    const { success, error } = await claimAdmin(setupKey)
+    if (success) {
+      if (refreshProfile) await refreshProfile()
+      window.location.reload()
+    } else {
+      setSetupError(error || 'Invalid key. Please try again.')
+    }
+    setSetupLoading(false)
+  }
+
+  // Show setup screen if not admin
+  if (!isAdmin) {
+    return (
+      <div className="container-sm page-top" style={{ textAlign: 'center', paddingTop: 160 }}>
+        <div style={{
+          background: 'var(--bg-card)', border: '1px solid var(--border)',
+          borderRadius: 16, padding: 48, maxWidth: 440, margin: '0 auto'
+        }}>
+          <div style={{ fontSize: 40, marginBottom: 16 }}>🔐</div>
+          <h1 style={{
+            color: 'var(--text)', fontSize: 24,
+            fontFamily: 'var(--font-display)', fontWeight: 400, marginBottom: 8
+          }}>Admin Access</h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginBottom: 28, lineHeight: 1.6 }}>
+            {user
+              ? 'Enter the admin setup key to access the dashboard.'
+              : 'Please sign in first, then enter your admin setup key.'}
+          </p>
+          {user ? (
+            <>
+              <Input
+                label="Setup Key"
+                type="password"
+                placeholder="Enter admin setup key"
+                value={setupKey}
+                onChange={e => setSetupKey(e.target.value)}
+              />
+              {setupError && (
+                <div style={{ marginTop: 12, padding: 10, borderRadius: 8, background: 'var(--red-bg)', border: '1px solid var(--red-border)', color: 'var(--red)', fontSize: 13 }}>
+                  {setupError}
+                </div>
+              )}
+              <GoldButton
+                onClick={handleAdminClaim}
+                disabled={!setupKey || setupLoading}
+                style={{ width: '100%', marginTop: 20, padding: '14px 28px' }}
+              >
+                {setupLoading ? 'Verifying...' : 'Unlock Dashboard'}
+              </GoldButton>
+            </>
+          ) : (
+            <p style={{ color: 'var(--text-muted)', fontSize: 13 }}>
+              Use the Sign In button in the navigation bar to continue.
+            </p>
+          )}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="container page-top">

@@ -66,7 +66,7 @@ export default function HomePage({ go }) {
               Book a Private Chef
             </GoldButton>
             <GoldButton onClick={() => go('/join')} variant="outline" style={{ padding: '16px 44px', fontSize: 16 }}>
-              Join as a Chef
+              Register as a Chef
             </GoldButton>
           </div>
         </div>
@@ -164,7 +164,7 @@ export default function HomePage({ go }) {
             ))}
           </div>
           <GoldButton onClick={() => go('/join')} style={{ padding: '16px 44px', fontSize: 16 }}>
-            Create Your Chef Profile →
+            Register as a Chef →
           </GoldButton>
         </div>
       </div>
