@@ -8,15 +8,28 @@ export default function Nav({ currentPath, go }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [authModal, setAuthModal] = useState({ open: false, mode: 'login', role: 'client' })
 
-  // Build nav links based on auth state
-  const links = [
-    { path: '/', label: 'Home' },
-    { path: '/chefs', label: 'Browse Chefs' },
-    { path: '/book', label: 'Book a Chef' },
-  ]
-  if (isChef || isAdmin) links.push({ path: '/dashboard', label: 'My Dashboard' })
-  if (!user || (!isChef && !isAdmin)) links.push({ path: '/join', label: 'Register as a Chef' })
-  if (isAdmin) links.push({ path: '/admin', label: 'Admin' })
+  // Role-based nav links
+  const links = [{ path: '/', label: 'Home' }]
+
+  if (!user) {
+    // Not signed in
+    links.push({ path: '/chefs', label: 'Browse Chefs' })
+    links.push({ path: '/book', label: 'Book a Chef' })
+    links.push({ path: '/join', label: 'Register as a Chef' })
+  } else if (isAdmin) {
+    // Admin sees everything
+    links.push({ path: '/dashboard', label: 'My Dashboard' })
+    links.push({ path: '/book', label: 'Book a Chef' })
+    links.push({ path: '/admin', label: 'Admin' })
+  } else if (isChef) {
+    // Chef sees their dashboard
+    links.push({ path: '/dashboard', label: 'My Dashboard' })
+  } else {
+    // Client sees booking tools
+    links.push({ path: '/book', label: 'Book a Chef' })
+    links.push({ path: '/chefs', label: 'Browse Chefs' })
+    links.push({ path: '/dashboard', label: 'My Bookings' })
+  }
 
   const openAuth = (mode = 'login', role = 'client') => setAuthModal({ open: true, mode, role })
   const closeAuth = () => setAuthModal({ open: false, mode: 'login', role: 'client' })
