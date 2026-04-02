@@ -15,9 +15,7 @@ export default function Footer({ go }) {
         }}>
           {/* Brand */}
           <div style={{ maxWidth: 280 }}>
-            <div style={{ background: '#1A1A18', borderRadius: 10, padding: '10px 20px', display: 'inline-block' }}>
-              <Logo size="sm" onClick={() => go('/')} />
-            </div>
+            <Logo size="sm" onClick={() => go('/')} />
             <p style={{ color: 'var(--text-muted)', fontSize: 13, lineHeight: 1.7, marginTop: 16 }}>
               South Africa's premier private chef marketplace. Exceptional dining experiences, delivered to your door.
             </p>

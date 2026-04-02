@@ -82,7 +82,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = 'login', defa
               <button key={r.val} onClick={() => setRole(r.val)} style={{
                 flex: 1, padding: '14px 12px', borderRadius: 'var(--radius-sm)',
                 cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center',
-                background: role === r.val ? 'rgba(184,151,47,0.12)' : 'rgba(255,255,255,0.03)',
+                background: role === r.val ? 'rgba(186,151,77,0.12)' : 'rgba(255,255,255,0.03)',
                 border: `1px solid ${role === r.val ? 'var(--gold)' : 'var(--border-input)'}`,
               }}>
                 <div style={{ fontSize: 20, marginBottom: 4 }}>{r.label}</div>

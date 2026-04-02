@@ -98,7 +98,7 @@ export default function ChefSignup({ go }) {
               <div style={{
                 marginTop: 16, padding: 20,
                 background: 'var(--gold-dim)', borderRadius: 12,
-                border: '1px solid rgba(184,151,47,0.15)'
+                border: '1px solid rgba(186,151,77,0.15)'
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
                   <span style={{ color: 'var(--text-secondary)', fontSize: 13 }}>Your rate</span>
@@ -108,7 +108,7 @@ export default function ChefSignup({ go }) {
                   <span style={{ color: 'var(--text-secondary)', fontSize: 13 }}>Platform fee (15%)</span>
                   <span style={{ color: 'var(--red)', fontSize: 14 }}>−R{(Number(data.rate) * PLATFORM_FEE).toFixed(0)}</span>
                 </div>
-                <div style={{ borderTop: '1px solid rgba(184,151,47,0.2)', paddingTop: 10, display: 'flex', justifyContent: 'space-between' }}>
+                <div style={{ borderTop: '1px solid rgba(186,151,77,0.2)', paddingTop: 10, display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ color: 'var(--text-secondary)', fontSize: 13, fontWeight: 600 }}>You receive</span>
                   <span style={{ color: 'var(--gold)', fontSize: 24, fontWeight: 800 }}>
                     R{(Number(data.rate) * (1 - PLATFORM_FEE)).toFixed(0)}/hr
@@ -127,7 +127,7 @@ export default function ChefSignup({ go }) {
                 <button key={h} onClick={() => upd('minHours', h)} style={{
                   flex: 1, padding: '14px 8px', borderRadius: 'var(--radius-sm)',
                   fontSize: 16, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
-                  background: data.minHours === h ? 'rgba(184,151,47,0.2)' : 'rgba(255,255,255,0.03)',
+                  background: data.minHours === h ? 'rgba(186,151,77,0.2)' : 'rgba(255,255,255,0.03)',
                   border: `1px solid ${data.minHours === h ? 'var(--gold)' : 'var(--border-input)'}`,
                   color: data.minHours === h ? 'var(--gold)' : '#888'
                 }}>{h}hrs</button>

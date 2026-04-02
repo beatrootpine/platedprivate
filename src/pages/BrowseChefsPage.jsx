@@ -67,7 +67,7 @@ export default function BrowseChefsPage() {
         <button onClick={() => setActiveSpec(null)} style={{
           padding: '6px 14px', borderRadius: 'var(--radius-pill)', fontSize: 12,
           fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
-          border: '1px solid', background: !activeSpec ? 'rgba(184,151,47,0.2)' : 'transparent',
+          border: '1px solid', background: !activeSpec ? 'rgba(186,151,77,0.2)' : 'transparent',
           borderColor: !activeSpec ? 'var(--gold)' : 'var(--border-input)',
           color: !activeSpec ? 'var(--gold)' : '#888'
         }}>All</button>
@@ -75,7 +75,7 @@ export default function BrowseChefsPage() {
           <button key={s} onClick={() => setActiveSpec(activeSpec === s ? null : s)} style={{
             padding: '6px 14px', borderRadius: 'var(--radius-pill)', fontSize: 12,
             fontWeight: 500, cursor: 'pointer', transition: 'all 0.2s',
-            border: '1px solid', background: activeSpec === s ? 'rgba(184,151,47,0.2)' : 'transparent',
+            border: '1px solid', background: activeSpec === s ? 'rgba(186,151,77,0.2)' : 'transparent',
             borderColor: activeSpec === s ? 'var(--gold)' : 'var(--border-input)',
             color: activeSpec === s ? 'var(--gold)' : '#888'
           }}>{s}</button>

@@ -1,12 +1,12 @@
 import { useState } from 'react'
 
-// ─── Logo (uses actual uploaded image) ──────────────────────────────────────
+// ─── Logo (SVG with transparent background) ────────────────────────────────
 export const Logo = ({ size = 'md', onClick }) => {
-  const heights = { sm: 32, md: 44, lg: 72, xl: 100 }
+  const heights = { sm: 36, md: 48, lg: 72, xl: 110 }
   const h = heights[size] || heights.md
   return (
     <img
-      src="/logo.png"
+      src="/logo.svg"
       alt="Plated Private"
       onClick={onClick}
       style={{
@@ -57,7 +57,7 @@ export const Badge = ({ children, variant = 'gold' }) => {
 export const GoldButton = ({ children, onClick, style = {}, disabled = false, variant = 'filled' }) => {
   const base = variant === 'filled'
     ? { background: disabled ? '#CCC' : 'linear-gradient(135deg, var(--gold), var(--gold-light))', color: '#FFFFFF', border: 'none' }
-    : { background: 'transparent', color: 'var(--gold)', border: '1px solid rgba(184,151,47,0.4)' }
+    : { background: 'transparent', color: 'var(--gold)', border: '1px solid rgba(186,151,77,0.4)' }
   return (
     <button onClick={onClick} disabled={disabled}
       style={{
@@ -65,7 +65,7 @@ export const GoldButton = ({ children, onClick, style = {}, disabled = false, va
         fontWeight: 700, fontSize: 14, cursor: disabled ? 'not-allowed' : 'pointer',
         letterSpacing: 0.5, transition: 'all 0.25s ease', ...style
       }}
-      onMouseEnter={e => { if (!disabled) { e.target.style.transform = 'translateY(-1px)'; e.target.style.boxShadow = '0 4px 20px rgba(184,151,47,0.2)'; }}}
+      onMouseEnter={e => { if (!disabled) { e.target.style.transform = 'translateY(-1px)'; e.target.style.boxShadow = '0 4px 20px rgba(186,151,77,0.2)'; }}}
       onMouseLeave={e => { e.target.style.transform = 'translateY(0)'; e.target.style.boxShadow = 'none'; }}
     >
       {children}
@@ -84,7 +84,7 @@ export const Input = ({ label, ...props }) => (
         fontSize: 14, outline: 'none', transition: 'border-color 0.2s', fontFamily: 'inherit',
         ...(props.style || {})
       }}
-      onFocus={e => e.target.style.borderColor = 'rgba(184,151,47,0.5)'}
+      onFocus={e => e.target.style.borderColor = 'rgba(186,151,77,0.5)'}
       onBlur={e => e.target.style.borderColor = 'var(--border-input)'}
     />
   </div>
@@ -101,7 +101,7 @@ export const TextArea = ({ label, ...props }) => (
         fontSize: 14, outline: 'none', resize: 'vertical', minHeight: 80,
         fontFamily: 'inherit', transition: 'border-color 0.2s', ...(props.style || {})
       }}
-      onFocus={e => e.target.style.borderColor = 'rgba(184,151,47,0.5)'}
+      onFocus={e => e.target.style.borderColor = 'rgba(186,151,77,0.5)'}
       onBlur={e => e.target.style.borderColor = 'var(--border-input)'}
     />
   </div>
@@ -120,7 +120,7 @@ export const TagSelector = ({ options, selected, onToggle, max }) => (
             fontWeight: 500, cursor: atMax ? 'not-allowed' : 'pointer', transition: 'all 0.2s',
             border: '1px solid',
             ...(active
-              ? { background: 'rgba(184,151,47,0.2)', borderColor: 'var(--gold)', color: 'var(--gold)' }
+              ? { background: 'rgba(186,151,77,0.2)', borderColor: 'var(--gold)', color: 'var(--gold)' }
               : { background: 'var(--bg-card)', borderColor: 'var(--border-input)', color: atMax ? '#444' : '#888' })
           }}
         >
@@ -134,7 +134,7 @@ export const TagSelector = ({ options, selected, onToggle, max }) => (
 // ─── Chef Avatar ────────────────────────────────────────────────────────────
 export const ChefAvatar = ({ name, size = 64 }) => {
   const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2)
-  const colors = ['#5E6B3A', '#7A8B4E', '#B8972F', '#8B7A2F', '#6B7B3A']
+  const colors = ['#BA974D', '#41413C', '#8B7A3D', '#5E5E4A', '#D4A843']
   const idx = name.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % colors.length
   return (
     <div style={{
@@ -155,7 +155,7 @@ export const ProgressBar = ({ step, total }) => (
       <div key={i} style={{
         flex: 1, height: 4, borderRadius: 2, transition: 'all 0.4s ease',
         background: i < step ? 'linear-gradient(90deg, var(--gold), var(--gold-light))'
-          : i === step ? 'rgba(184,151,47,0.4)' : 'var(--border)'
+          : i === step ? 'rgba(186,151,77,0.4)' : 'var(--border)'
       }} />
     ))}
   </div>
@@ -186,7 +186,7 @@ export const ChefCard = ({ chef, onSelect, showSelect }) => (
       borderRadius: 16, padding: 24, transition: 'all 0.3s',
       cursor: 'default', position: 'relative', overflow: 'hidden'
     }}
-    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(184,151,47,0.3)'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.08)'; }}
+    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(186,151,77,0.3)'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.08)'; }}
     onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
   >
     {chef.verified && (

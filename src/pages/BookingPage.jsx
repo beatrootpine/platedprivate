@@ -116,7 +116,7 @@ export default function BookingPage({ go }) {
         </div>
         <div style={{
           width: 64, height: 64, margin: '0 auto 28px',
-          border: '3px solid rgba(184,151,47,0.2)', borderTopColor: 'var(--gold)',
+          border: '3px solid rgba(186,151,77,0.2)', borderTopColor: 'var(--gold)',
           borderRadius: '50%', animation: 'spin 1s linear infinite'
         }} />
         <h2 style={{
@@ -292,7 +292,7 @@ export default function BookingPage({ go }) {
               <button key={g} onClick={() => upd('guests', g)} style={{
                 flex: '1 1 60px', padding: '11px 4px', borderRadius: 'var(--radius-sm)',
                 fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
-                background: booking.guests === g ? 'rgba(184,151,47,0.2)' : 'rgba(255,255,255,0.03)',
+                background: booking.guests === g ? 'rgba(186,151,77,0.2)' : 'rgba(255,255,255,0.03)',
                 border: `1px solid ${booking.guests === g ? 'var(--gold)' : 'var(--border-input)'}`,
                 color: booking.guests === g ? 'var(--gold)' : '#888'
               }}>{g}</button>
@@ -310,7 +310,7 @@ export default function BookingPage({ go }) {
               <button key={h} onClick={() => upd('hours', h)} style={{
                 flex: '1 1 60px', padding: '11px 4px', borderRadius: 'var(--radius-sm)',
                 fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
-                background: booking.hours === h ? 'rgba(184,151,47,0.2)' : 'rgba(255,255,255,0.03)',
+                background: booking.hours === h ? 'rgba(186,151,77,0.2)' : 'rgba(255,255,255,0.03)',
                 border: `1px solid ${booking.hours === h ? 'var(--gold)' : 'var(--border-input)'}`,
                 color: booking.hours === h ? 'var(--gold)' : '#888'
               }}>{h}hrs</button>

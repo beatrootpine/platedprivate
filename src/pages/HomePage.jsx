@@ -36,21 +36,14 @@ export default function HomePage({ go }) {
         {/* Subtle grid pattern */}
         <div style={{
           position: 'absolute', inset: 0, opacity: 0.03,
-          backgroundImage: 'linear-gradient(rgba(184,151,47,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(184,151,47,0.3) 1px, transparent 1px)',
+          backgroundImage: 'linear-gradient(rgba(186,151,77,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(186,151,77,0.3) 1px, transparent 1px)',
           backgroundSize: '60px 60px'
         }} />
 
         <div style={{ position: 'relative', zIndex: 1 }} className="animate-in">
-          {/* Actual Logo — on dark container for contrast */}
-          <div style={{
-            marginBottom: 32, display: 'flex', justifyContent: 'center'
-          }}>
-            <div style={{
-              background: '#1A1A18', borderRadius: 16, padding: '20px 36px',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
-            }}>
-              <Logo size="xl" />
-            </div>
+          {/* Logo — transparent SVG */}
+          <div style={{ marginBottom: 32, display: 'flex', justifyContent: 'center' }}>
+            <Logo size="xl" />
           </div>
 
           <p style={{
@@ -104,7 +97,7 @@ export default function HomePage({ go }) {
             }}>
               <div style={{
                 position: 'absolute', top: -10, right: -5, fontSize: 80,
-                fontWeight: 900, color: 'rgba(184,151,47,0.1)',
+                fontWeight: 900, color: 'rgba(186,151,77,0.1)',
                 fontFamily: 'var(--font-display)', lineHeight: 1
               }}>{s.num}</div>
               <div style={{ fontSize: 32, marginBottom: 16 }}>{s.icon}</div>
@@ -134,7 +127,7 @@ export default function HomePage({ go }) {
 
       {/* ─── For Chefs CTA ────────────────────────────────────── */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(94,107,58,0.06) 0%, rgba(184,151,47,0.04) 100%)',
+        background: 'linear-gradient(135deg, rgba(94,107,58,0.06) 0%, rgba(186,151,77,0.04) 100%)',
         borderTop: '1px solid var(--border)',
         borderBottom: '1px solid var(--border)',
         padding: '80px 24px'
