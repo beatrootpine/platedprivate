@@ -1,23 +1,78 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Badge, ChefAvatar, GoldButton } from '../components/UI'
 import { MOCK_CHEFS, MOCK_BOOKINGS, PLATFORM_FEE } from '../data/constants'
+import { useAuth } from '../context/AuthContext'
+import { getAdminBookings, getAdminRevenue, getAdminChefs, suspendChef, reactivateChef, removeChef as removeChefApi } from '../lib/api'
+import { normalizeAdminChef } from '../lib/helpers'
 
 export default function AdminDashboard() {
+  const { isAdmin } = useAuth()
   const [tab, setTab] = useState('deals')
-  const [chefs, setChefs] = useState(MOCK_CHEFS.map(c => ({ ...c })))
+  const [chefs, setChefs] = useState([])
+  const [bookings, setBookings] = useState([])
+  const [revenue, setRevenue] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  const totalRevenue = MOCK_BOOKINGS.reduce((a, b) => a + b.total, 0)
-  const totalCommission = MOCK_BOOKINGS.reduce((a, b) => a + b.commission, 0)
-  const completedCount = MOCK_BOOKINGS.filter(b => b.status === 'completed').length
-  const pendingCount = MOCK_BOOKINGS.filter(b => b.status === 'pending').length
+  useEffect(() => { loadData() }, [])
 
-  const toggleChef = (id) => {
-    setChefs(prev => prev.map(c => c.id === id ? { ...c, available: !c.available } : c))
-  }
-  const removeChef = (id) => {
-    if (confirm('Are you sure you want to remove this chef from the platform? This cannot be undone.')) {
-      setChefs(prev => prev.filter(c => c.id !== id))
+  async function loadData() {
+    setLoading(true)
+    try {
+      // Try Supabase admin views
+      const [bookRes, revRes, chefRes] = await Promise.all([
+        getAdminBookings(),
+        getAdminRevenue(),
+        getAdminChefs()
+      ])
+
+      if (!bookRes.error && bookRes.data?.length > 0) {
+        setBookings(bookRes.data)
+      } else {
+        setBookings(MOCK_BOOKINGS)
+      }
+
+      if (!revRes.error && revRes.data) {
+        setRevenue(revRes.data)
+      }
+
+      if (!chefRes.error && chefRes.data?.length > 0) {
+        setChefs(chefRes.data.map(normalizeAdminChef))
+      } else {
+        setChefs(MOCK_CHEFS.map(c => ({ ...c })))
+      }
+    } catch (e) {
+      // Fallback to mock
+      setBookings(MOCK_BOOKINGS)
+      setChefs(MOCK_CHEFS.map(c => ({ ...c })))
     }
+    setLoading(false)
+  }
+
+  // Compute stats from bookings (works for both real and mock data)
+  const totalRevenue = revenue?.total_revenue || bookings.reduce((a, b) => a + (b.total || b.subtotal || 0), 0)
+  const totalCommission = revenue?.total_commission || bookings.reduce((a, b) => a + (b.commission || b.platform_fee || 0), 0)
+  const completedCount = revenue?.completed_bookings || bookings.filter(b => b.status === 'completed').length
+  const pendingCount = revenue?.pending_bookings || bookings.filter(b => b.status === 'pending').length
+
+  const toggleChef = async (id) => {
+    const chef = chefs.find(c => c.id === id)
+    if (!chef) return
+    try {
+      if (chef.available) {
+        await suspendChef(id, 'Suspended by admin')
+      } else {
+        await reactivateChef(id)
+      }
+    } catch (e) { /* fallback */ }
+    setChefs(prev => prev.map(c => c.id === id ? { ...c, available: !c.available, status: c.available ? 'suspended' : 'active' } : c))
+  }
+
+  const removeChef = async (id) => {
+    if (!confirm('Are you sure you want to remove this chef from the platform? This cannot be undone.')) return
+    try {
+      await removeChefApi(id)
+    } catch (e) { /* fallback */ }
+    setChefs(prev => prev.filter(c => c.id !== id))
   }
 
   const statusColor = (s) => s === 'completed' ? 'green' : s === 'confirmed' ? 'blue' : 'gold'
@@ -68,7 +123,7 @@ export default function AdminDashboard() {
         borderBottom: '1px solid var(--border-light)', paddingBottom: 2
       }}>
         {[
-          { key: 'deals', label: '📋 All Deals', count: MOCK_BOOKINGS.length },
+          { key: 'deals', label: '📋 All Deals', count: bookings.length },
           { key: 'chefs', label: '👨‍🍳 Manage Chefs', count: chefs.length }
         ].map(t => (
           <button key={t.key} onClick={() => setTab(t.key)} style={{
@@ -100,18 +155,18 @@ export default function AdminDashboard() {
               </tr>
             </thead>
             <tbody>
-              {MOCK_BOOKINGS.map(b => (
-                <tr key={b.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}
+              {bookings.map(b => (
+                <tr key={b.id || b.booking_ref} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}
                   onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.02)'}
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
-                  <td style={{ padding: '14px 16px', color: 'var(--gold)', fontWeight: 600, fontFamily: 'monospace' }}>{b.id}</td>
-                  <td style={{ padding: '14px 16px', color: '#fff' }}>{b.client}</td>
-                  <td style={{ padding: '14px 16px', color: '#ddd' }}>{b.chef}</td>
-                  <td style={{ padding: '14px 16px', color: '#aaa', whiteSpace: 'nowrap' }}>{b.date}</td>
+                  <td style={{ padding: '14px 16px', color: 'var(--gold)', fontWeight: 600, fontFamily: 'monospace' }}>{b.booking_ref || b.id}</td>
+                  <td style={{ padding: '14px 16px', color: '#fff' }}>{b.client_name || b.client}</td>
+                  <td style={{ padding: '14px 16px', color: '#ddd' }}>{b.chef_name || b.chef}</td>
+                  <td style={{ padding: '14px 16px', color: '#aaa', whiteSpace: 'nowrap' }}>{b.event_date || b.date}</td>
                   <td style={{ padding: '14px 16px', color: '#aaa' }}>{b.hours}hrs</td>
-                  <td style={{ padding: '14px 16px', color: '#aaa' }}>R{b.rate}</td>
-                  <td style={{ padding: '14px 16px', color: '#fff', fontWeight: 600 }}>R{b.total.toLocaleString()}</td>
-                  <td style={{ padding: '14px 16px', color: 'var(--gold)', fontWeight: 600 }}>R{b.commission.toLocaleString()}</td>
+                  <td style={{ padding: '14px 16px', color: '#aaa' }}>R{b.chef_rate || b.rate}</td>
+                  <td style={{ padding: '14px 16px', color: '#fff', fontWeight: 600 }}>R{(b.subtotal || b.total || 0).toLocaleString()}</td>
+                  <td style={{ padding: '14px 16px', color: 'var(--gold)', fontWeight: 600 }}>R{(b.platform_fee || b.commission || 0).toLocaleString()}</td>
                   <td style={{ padding: '14px 16px' }}>
                     <Badge variant={statusColor(b.status)}>{b.status}</Badge>
                   </td>

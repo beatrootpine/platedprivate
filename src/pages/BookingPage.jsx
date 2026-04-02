@@ -1,8 +1,12 @@
 import { useState } from 'react'
 import { GoldButton, Input, TextArea, TagSelector, ChefCard, ChefAvatar, Logo } from '../components/UI'
 import { MOCK_CHEFS, SPECIALITIES } from '../data/constants'
+import { useAuth } from '../context/AuthContext'
+import { matchChefs, matchChefsFallback, createBooking } from '../lib/api'
+import { normalizeMatchedChef, normalizeChef } from '../lib/helpers'
 
 export default function BookingPage({ go }) {
+  const { user, profile } = useAuth()
   const [step, setStep] = useState(0)
   const [booking, setBooking] = useState({
     name: '', email: '', phone: '', date: '', time: '18:00',
@@ -19,32 +23,84 @@ export default function BookingPage({ go }) {
       : p.cuisine.length < 3 ? [...p.cuisine, v] : p.cuisine
   }))
 
-  const findChefs = () => {
+  const findChefs = async () => {
     setStep(1)
-    setTimeout(() => {
-      let matches = MOCK_CHEFS.filter(c => c.available)
-      if (booking.area) {
-        matches = matches.filter(c =>
-          c.areas.some(a => a.toLowerCase().includes(booking.area.toLowerCase()))
-        )
+    const hrs = parseInt(booking.hours) || 3
+
+    try {
+      // Try smart matching via Supabase RPC
+      const { data, error } = await matchChefs({
+        area: booking.area,
+        cuisines: booking.cuisine,
+        hours: hrs,
+        limit: 3
+      })
+
+      if (!error && data?.length > 0) {
+        setMatchedChefs(data.map(normalizeMatchedChef))
+        setStep(2)
+        return
       }
-      if (booking.cuisine.length > 0) {
-        matches.sort((a, b) => {
-          const aMatch = a.speciality.filter(s => booking.cuisine.includes(s)).length
-          const bMatch = b.speciality.filter(s => booking.cuisine.includes(s)).length
-          return bMatch - aMatch
-        })
+
+      // Fallback: direct query
+      const { data: fallbackData } = await matchChefsFallback({
+        area: booking.area,
+        cuisines: booking.cuisine,
+        hours: hrs
+      })
+
+      if (fallbackData?.length > 0) {
+        setMatchedChefs(fallbackData.map(normalizeChef))
+        setStep(2)
+        return
       }
-      // Ensure min hours check
-      const hrs = parseInt(booking.hours) || 3
-      matches = matches.filter(c => c.minHours <= hrs)
-      setMatchedChefs(matches.slice(0, 3))
-      setStep(2)
-    }, 2200)
+    } catch (e) {
+      console.log('Supabase not available, using mock data')
+    }
+
+    // Final fallback: mock data
+    let matches = MOCK_CHEFS.filter(c => c.available)
+    if (booking.area) {
+      matches = matches.filter(c =>
+        c.areas.some(a => a.toLowerCase().includes(booking.area.toLowerCase()))
+      )
+    }
+    if (booking.cuisine.length > 0) {
+      matches.sort((a, b) => {
+        const aMatch = a.speciality.filter(s => booking.cuisine.includes(s)).length
+        const bMatch = b.speciality.filter(s => booking.cuisine.includes(s)).length
+        return bMatch - aMatch
+      })
+    }
+    matches = matches.filter(c => c.minHours <= hrs)
+    setMatchedChefs(matches.slice(0, 3))
+    setStep(2)
   }
 
-  const confirmBooking = (chef) => {
+  const confirmBooking = async (chef) => {
     setSelectedChef(chef)
+
+    // Try to save booking to Supabase if user is logged in
+    if (user && chef.id) {
+      try {
+        await createBooking({
+          client_id: user.id,
+          chef_id: chef.id,
+          event_date: booking.date,
+          event_time: booking.time,
+          guest_count: parseInt(booking.guests) || 4,
+          hours: parseInt(booking.hours) || 3,
+          location_area: booking.area,
+          cuisine_preferences: booking.cuisine,
+          dietary_requirements: booking.dietary,
+          special_requests: booking.notes,
+          rate_per_hour: chef.rate,
+        })
+      } catch (e) {
+        console.log('Could not save booking:', e)
+      }
+    }
+
     setStep(3)
   }
 

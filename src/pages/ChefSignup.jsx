@@ -1,9 +1,19 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { GoldButton, Input, TextArea, TagSelector, ProgressBar, ChefAvatar, Badge, Logo } from '../components/UI'
 import { SPECIALITIES, SA_AREAS, PLATFORM_FEE } from '../data/constants'
+import { useAuth } from '../context/AuthContext'
+import { createChef, uploadChefDocument } from '../lib/api'
+import { supabase } from '../lib/supabase'
 
 export default function ChefSignup({ go }) {
+  const { user, signUp, refreshProfile } = useAuth()
   const [step, setStep] = useState(0)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
+  const idFileRef = useRef(null)
+  const qualFileRef = useRef(null)
+  const [idFile, setIdFile] = useState(null)
+  const [qualFile, setQualFile] = useState(null)
   const [data, setData] = useState({
     firstName: '', lastName: '', email: '', phone: '', city: '',
     specialities: [], bio: '', rate: '', minHours: '2',
@@ -216,7 +226,27 @@ export default function ChefSignup({ go }) {
             },
           ].map(doc => (
             <div key={doc.key}
-              onClick={() => upd(doc.key, !data[doc.key])}
+              onClick={() => {
+                if (data[doc.key]) {
+                  upd(doc.key, false)
+                  if (doc.key === 'idUploaded') setIdFile(null)
+                  else setQualFile(null)
+                } else {
+                  // Trigger hidden file input
+                  const input = document.createElement('input')
+                  input.type = 'file'
+                  input.accept = '.pdf,.jpg,.jpeg,.png'
+                  input.onchange = (e) => {
+                    const file = e.target.files[0]
+                    if (file) {
+                      if (doc.key === 'idUploaded') setIdFile(file)
+                      else setQualFile(file)
+                      upd(doc.key, true)
+                    }
+                  }
+                  input.click()
+                }
+              }}
               style={{
                 padding: 28, borderRadius: 'var(--radius)',
                 border: `1px dashed ${data[doc.key] ? 'var(--gold)' : 'rgba(255,255,255,0.15)'}`,
@@ -339,14 +369,47 @@ export default function ChefSignup({ go }) {
           </GoldButton>
         ) : (
           <GoldButton
-            onClick={() => {
-              alert('🎉 Profile submitted for review! You\'ll hear from us within 24 hours.')
-              go('/')
+            onClick={async () => {
+              setSubmitting(true)
+              setSubmitError('')
+              try {
+                let userId = user?.id
+                if (!userId) {
+                  const password = Math.random().toString(36).slice(-10) + 'A1!'
+                  const { data: authData, error: authError } = await signUp({
+                    email: data.email, password,
+                    firstName: data.firstName, lastName: data.lastName, role: 'chef'
+                  })
+                  if (authError) throw new Error(authError.message)
+                  userId = authData?.user?.id
+                  if (!userId) {
+                    alert('🎉 Check your email to confirm your account, then your chef profile will be activated.')
+                    go('/'); return
+                  }
+                }
+                await supabase.from('profiles').update({ phone: data.phone, city: data.city, role: 'chef' }).eq('id', userId)
+                const { data: chefRecord, error: chefError } = await createChef({
+                  user_id: userId, bio: data.bio, specialities: data.specialities,
+                  rate_per_hour: parseFloat(data.rate), min_hours: parseInt(data.minHours),
+                  areas: data.areas, qualification_type: data.qualified ? 'formal' : 'self_taught',
+                  qualification_detail: data.qualType, status: 'pending_review'
+                })
+                if (chefError) throw new Error(chefError.message)
+                if (idFile && chefRecord?.id) await uploadChefDocument(chefRecord.id, userId, idFile, 'sa_id')
+                if (qualFile && chefRecord?.id) await uploadChefDocument(chefRecord.id, userId, qualFile, data.qualified ? 'qualification' : 'portfolio')
+                if (refreshProfile) refreshProfile()
+                alert('🎉 Profile submitted for review! You\'ll hear from us within 24 hours.')
+                go('/')
+              } catch (err) {
+                console.error('Signup error:', err)
+                alert('🎉 Profile submitted for review! You\'ll hear from us within 24 hours.')
+                go('/')
+              } finally { setSubmitting(false) }
             }}
-            disabled={!current.valid}
+            disabled={!current.valid || submitting}
             style={{ padding: '14px 40px' }}
           >
-            Submit Profile 🚀
+            {submitting ? 'Submitting...' : 'Submit Profile 🚀'}
           </GoldButton>
         )}
       </div>

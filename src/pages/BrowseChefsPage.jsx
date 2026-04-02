@@ -1,13 +1,31 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Input, ChefCard, Badge } from '../components/UI'
 import { MOCK_CHEFS, SPECIALITIES } from '../data/constants'
+import { getActiveChefs } from '../lib/api'
+import { normalizeChef } from '../lib/helpers'
 
 export default function BrowseChefsPage() {
   const [search, setSearch] = useState('')
   const [areaSearch, setAreaSearch] = useState('')
   const [activeSpec, setActiveSpec] = useState(null)
+  const [chefs, setChefs] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  const filtered = MOCK_CHEFS.filter(c => {
+  useEffect(() => {
+    async function fetchChefs() {
+      const { data, error } = await getActiveChefs()
+      if (!error && data?.length > 0) {
+        setChefs(data.map(normalizeChef))
+      } else {
+        // Fallback to mock data
+        setChefs(MOCK_CHEFS)
+      }
+      setLoading(false)
+    }
+    fetchChefs()
+  }, [])
+
+  const filtered = chefs.filter(c => {
     if (activeSpec && !c.speciality.includes(activeSpec)) return false
     if (search && !c.name.toLowerCase().includes(search.toLowerCase()) &&
         !c.speciality.some(s => s.toLowerCase().includes(search.toLowerCase()))) return false
@@ -23,7 +41,7 @@ export default function BrowseChefsPage() {
           fontFamily: 'var(--font-display)', fontWeight: 300, marginBottom: 8
         }}>Browse Chefs</h1>
         <p style={{ color: '#888', fontSize: 15 }}>
-          Discover South Africa's finest private chefs — {MOCK_CHEFS.filter(c => c.available).length} currently available
+          Discover South Africa's finest private chefs — {chefs.filter(c => c.available).length} currently available
         </p>
       </div>
 

@@ -1,7 +1,24 @@
+import { useState, useEffect } from 'react'
 import { Logo, GoldButton, SectionHeader, ChefCard } from '../components/UI'
 import { MOCK_CHEFS } from '../data/constants'
+import { getActiveChefs } from '../lib/api'
+import { normalizeChef } from '../lib/helpers'
 
 export default function HomePage({ go }) {
+  const [featuredChefs, setFeaturedChefs] = useState([])
+
+  useEffect(() => {
+    async function load() {
+      const { data, error } = await getActiveChefs()
+      if (!error && data?.length > 0) {
+        setFeaturedChefs(data.map(normalizeChef).slice(0, 3))
+      } else {
+        setFeaturedChefs(MOCK_CHEFS.filter(c => c.available).slice(0, 3))
+      }
+    }
+    load()
+  }, [])
+
   return (
     <div>
       {/* ─── Hero ─────────────────────────────────────────────── */}
@@ -99,7 +116,7 @@ export default function HomePage({ go }) {
           gridTemplateColumns: 'repeat(auto-fill, minmax(330px, 1fr))',
           gap: 24
         }}>
-          {MOCK_CHEFS.filter(c => c.available).slice(0, 3).map(c => (
+          {featuredChefs.map(c => (
             <ChefCard key={c.id} chef={c} />
           ))}
         </div>
