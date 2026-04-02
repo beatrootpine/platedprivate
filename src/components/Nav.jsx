@@ -23,8 +23,8 @@ export default function Nav({ currentPath, go }) {
   const NavLink = ({ path, label, mobile }) => (
     <button onClick={() => { go(path); if (mobile) setMobileOpen(false) }}
       style={{
-        background: currentPath === path ? 'rgba(201,168,76,0.1)' : 'transparent',
-        border: 'none', color: currentPath === path ? 'var(--gold)' : 'var(--text-secondary)',
+        background: currentPath === path ? 'rgba(184,151,47,0.15)' : 'transparent',
+        border: 'none', color: currentPath === path ? '#D4B44A' : '#AAA',
         padding: mobile ? '14px 16px' : '8px 16px',
         borderRadius: 'var(--radius-sm)', fontSize: mobile ? 15 : 13,
         fontWeight: 500, cursor: 'pointer', transition: 'all 0.2s',
@@ -65,16 +65,16 @@ export default function Nav({ currentPath, go }) {
                     {profile?.first_name?.[0]}{profile?.last_name?.[0]}
                   </div>
                   <button onClick={signOut} style={{
-                    background: 'none', border: '1px solid rgba(255,255,255,0.1)',
-                    color: '#888', padding: '6px 14px', borderRadius: 6,
+                    background: 'none', border: '1px solid rgba(255,255,255,0.15)',
+                    color: '#AAA', padding: '6px 14px', borderRadius: 6,
                     fontSize: 12, cursor: 'pointer'
                   }}>Sign Out</button>
                 </div>
               ) : (
                 <div style={{ display: 'flex', gap: 6, marginLeft: 8 }}>
                   <button onClick={() => openAuth('login')} style={{
-                    background: 'none', border: '1px solid rgba(255,255,255,0.1)',
-                    color: '#ccc', padding: '7px 16px', borderRadius: 6,
+                    background: 'none', border: '1px solid rgba(255,255,255,0.15)',
+                    color: '#DDD', padding: '7px 16px', borderRadius: 6,
                     fontSize: 13, fontWeight: 500, cursor: 'pointer'
                   }}>Sign In</button>
                   <GoldButton onClick={() => openAuth('signup')} style={{ padding: '7px 16px', fontSize: 13 }}>
@@ -100,7 +100,7 @@ export default function Nav({ currentPath, go }) {
         {/* Mobile dropdown */}
         {mobileOpen && (
           <div className="nav-mobile-menu" style={{
-            background: 'rgba(10,10,10,0.98)',
+            background: 'rgba(26,26,24,0.98)',
             borderTop: '1px solid var(--border-light)',
             padding: 16, display: 'flex', flexDirection: 'column', gap: 4
           }}>
@@ -109,7 +109,7 @@ export default function Nav({ currentPath, go }) {
               <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
                 <button onClick={() => { openAuth('login'); setMobileOpen(false) }} style={{
                   flex: 1, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-input)',
-                  color: '#ccc', padding: '12px', borderRadius: 8, fontSize: 14, cursor: 'pointer'
+                  color: '#DDD', padding: '12px', borderRadius: 8, fontSize: 14, cursor: 'pointer'
                 }}>Sign In</button>
                 <GoldButton onClick={() => { openAuth('signup'); setMobileOpen(false) }} style={{ flex: 1, padding: '12px' }}>
                   Sign Up
@@ -118,12 +118,12 @@ export default function Nav({ currentPath, go }) {
             )}
             {!loading && user && (
               <div style={{ borderTop: '1px solid var(--border-light)', marginTop: 8, paddingTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ color: '#888', fontSize: 13 }}>
+                <span style={{ color: '#AAA', fontSize: 13 }}>
                   {profile?.first_name} {profile?.last_name}
                 </span>
                 <button onClick={() => { signOut(); setMobileOpen(false) }} style={{
-                  background: 'none', border: '1px solid rgba(255,255,255,0.1)',
-                  color: '#888', padding: '6px 14px', borderRadius: 6,
+                  background: 'none', border: '1px solid rgba(255,255,255,0.15)',
+                  color: '#AAA', padding: '6px 14px', borderRadius: 6,
                   fontSize: 12, cursor: 'pointer'
                 }}>Sign Out</button>
               </div>

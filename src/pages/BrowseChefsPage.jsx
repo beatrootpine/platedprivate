@@ -37,10 +37,10 @@ export default function BrowseChefsPage() {
     <div className="container page-top">
       <div style={{ marginBottom: 40 }}>
         <h1 style={{
-          color: '#fff', fontSize: 'clamp(28px, 4vw, 36px)',
+          color: 'var(--text)', fontSize: 'clamp(28px, 4vw, 36px)',
           fontFamily: 'var(--font-display)', fontWeight: 300, marginBottom: 8
         }}>Browse Chefs</h1>
-        <p style={{ color: '#888', fontSize: 15 }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 15 }}>
           Discover South Africa's finest private chefs — {chefs.filter(c => c.available).length} currently available
         </p>
       </div>
@@ -67,7 +67,7 @@ export default function BrowseChefsPage() {
         <button onClick={() => setActiveSpec(null)} style={{
           padding: '6px 14px', borderRadius: 'var(--radius-pill)', fontSize: 12,
           fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
-          border: '1px solid', background: !activeSpec ? 'rgba(201,168,76,0.2)' : 'transparent',
+          border: '1px solid', background: !activeSpec ? 'rgba(184,151,47,0.2)' : 'transparent',
           borderColor: !activeSpec ? 'var(--gold)' : 'var(--border-input)',
           color: !activeSpec ? 'var(--gold)' : '#888'
         }}>All</button>
@@ -75,7 +75,7 @@ export default function BrowseChefsPage() {
           <button key={s} onClick={() => setActiveSpec(activeSpec === s ? null : s)} style={{
             padding: '6px 14px', borderRadius: 'var(--radius-pill)', fontSize: 12,
             fontWeight: 500, cursor: 'pointer', transition: 'all 0.2s',
-            border: '1px solid', background: activeSpec === s ? 'rgba(201,168,76,0.2)' : 'transparent',
+            border: '1px solid', background: activeSpec === s ? 'rgba(184,151,47,0.2)' : 'transparent',
             borderColor: activeSpec === s ? 'var(--gold)' : 'var(--border-input)',
             color: activeSpec === s ? 'var(--gold)' : '#888'
           }}>{s}</button>
@@ -83,7 +83,7 @@ export default function BrowseChefsPage() {
       </div>
 
       {/* Results count */}
-      <div style={{ marginBottom: 20, fontSize: 13, color: '#666' }}>
+      <div style={{ marginBottom: 20, fontSize: 13, color: 'var(--text-muted)' }}>
         Showing {filtered.length} chef{filtered.length !== 1 ? 's' : ''}
         {(search || areaSearch || activeSpec) && (
           <button onClick={() => { setSearch(''); setAreaSearch(''); setActiveSpec(null) }}
@@ -106,9 +106,9 @@ export default function BrowseChefsPage() {
       </div>
 
       {filtered.length === 0 && (
-        <div style={{ textAlign: 'center', padding: '80px 24px', color: '#666' }}>
+        <div style={{ textAlign: 'center', padding: '80px 24px', color: 'var(--text-muted)' }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>🔍</div>
-          <h3 style={{ color: '#fff', fontWeight: 400, fontFamily: 'var(--font-display)', marginBottom: 8 }}>
+          <h3 style={{ color: 'var(--text)', fontWeight: 400, fontFamily: 'var(--font-display)', marginBottom: 8 }}>
             No chefs found
           </h3>
           <p>Try adjusting your filters or search terms</p>

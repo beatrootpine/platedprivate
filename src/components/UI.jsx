@@ -38,7 +38,7 @@ export const Badge = ({ children, variant = 'gold' }) => {
     gold:  { background: 'var(--gold-dim)', color: 'var(--gold)', border: '1px solid var(--gold-border)' },
     green: { background: 'var(--green-bg)', color: 'var(--green)', border: '1px solid var(--green-border)' },
     red:   { background: 'var(--red-bg)',   color: 'var(--red)',   border: '1px solid var(--red-border)' },
-    grey:  { background: 'rgba(255,255,255,0.06)', color: '#999', border: '1px solid rgba(255,255,255,0.1)' },
+    grey:  { background: 'var(--bg-warm)', color: 'var(--text-secondary)', border: '1px solid var(--border-input)' },
     blue:  { background: 'var(--blue-bg)',  color: 'var(--blue)',  border: '1px solid var(--blue-border)' },
   }
   return (
@@ -56,8 +56,8 @@ export const Badge = ({ children, variant = 'gold' }) => {
 // ─── Gold Button ────────────────────────────────────────────────────────────
 export const GoldButton = ({ children, onClick, style = {}, disabled = false, variant = 'filled' }) => {
   const base = variant === 'filled'
-    ? { background: disabled ? '#555' : 'linear-gradient(135deg, var(--gold), var(--gold-light))', color: '#0a0a0a', border: 'none' }
-    : { background: 'transparent', color: 'var(--gold)', border: '1px solid rgba(201,168,76,0.4)' }
+    ? { background: disabled ? '#CCC' : 'linear-gradient(135deg, var(--gold), var(--gold-light))', color: '#FFFFFF', border: 'none' }
+    : { background: 'transparent', color: 'var(--gold)', border: '1px solid rgba(184,151,47,0.4)' }
   return (
     <button onClick={onClick} disabled={disabled}
       style={{
@@ -65,7 +65,7 @@ export const GoldButton = ({ children, onClick, style = {}, disabled = false, va
         fontWeight: 700, fontSize: 14, cursor: disabled ? 'not-allowed' : 'pointer',
         letterSpacing: 0.5, transition: 'all 0.25s ease', ...style
       }}
-      onMouseEnter={e => { if (!disabled) { e.target.style.transform = 'translateY(-1px)'; e.target.style.boxShadow = '0 4px 20px rgba(201,168,76,0.2)'; }}}
+      onMouseEnter={e => { if (!disabled) { e.target.style.transform = 'translateY(-1px)'; e.target.style.boxShadow = '0 4px 20px rgba(184,151,47,0.2)'; }}}
       onMouseLeave={e => { e.target.style.transform = 'translateY(0)'; e.target.style.boxShadow = 'none'; }}
     >
       {children}
@@ -79,13 +79,13 @@ export const Input = ({ label, ...props }) => (
     {label && <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)', letterSpacing: 0.5, textTransform: 'uppercase' }}>{label}</label>}
     <input {...props}
       style={{
-        background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-input)',
-        borderRadius: 'var(--radius-sm)', padding: '12px 16px', color: '#fff',
+        background: '#FFFFFF', border: '1px solid var(--border-input)',
+        borderRadius: 'var(--radius-sm)', padding: '12px 16px', color: 'var(--text)',
         fontSize: 14, outline: 'none', transition: 'border-color 0.2s', fontFamily: 'inherit',
         ...(props.style || {})
       }}
-      onFocus={e => e.target.style.borderColor = 'rgba(201,168,76,0.5)'}
-      onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+      onFocus={e => e.target.style.borderColor = 'rgba(184,151,47,0.5)'}
+      onBlur={e => e.target.style.borderColor = 'var(--border-input)'}
     />
   </div>
 )
@@ -96,13 +96,13 @@ export const TextArea = ({ label, ...props }) => (
     {label && <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)', letterSpacing: 0.5, textTransform: 'uppercase' }}>{label}</label>}
     <textarea {...props}
       style={{
-        background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-input)',
-        borderRadius: 'var(--radius-sm)', padding: '12px 16px', color: '#fff',
+        background: '#FFFFFF', border: '1px solid var(--border-input)',
+        borderRadius: 'var(--radius-sm)', padding: '12px 16px', color: 'var(--text)',
         fontSize: 14, outline: 'none', resize: 'vertical', minHeight: 80,
         fontFamily: 'inherit', transition: 'border-color 0.2s', ...(props.style || {})
       }}
-      onFocus={e => e.target.style.borderColor = 'rgba(201,168,76,0.5)'}
-      onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+      onFocus={e => e.target.style.borderColor = 'rgba(184,151,47,0.5)'}
+      onBlur={e => e.target.style.borderColor = 'var(--border-input)'}
     />
   </div>
 )
@@ -120,8 +120,8 @@ export const TagSelector = ({ options, selected, onToggle, max }) => (
             fontWeight: 500, cursor: atMax ? 'not-allowed' : 'pointer', transition: 'all 0.2s',
             border: '1px solid',
             ...(active
-              ? { background: 'rgba(201,168,76,0.2)', borderColor: 'var(--gold)', color: 'var(--gold)' }
-              : { background: 'rgba(255,255,255,0.03)', borderColor: 'var(--border-input)', color: atMax ? '#444' : '#888' })
+              ? { background: 'rgba(184,151,47,0.2)', borderColor: 'var(--gold)', color: 'var(--gold)' }
+              : { background: 'var(--bg-card)', borderColor: 'var(--border-input)', color: atMax ? '#444' : '#888' })
           }}
         >
           {active && '✓ '}{opt}
@@ -134,14 +134,14 @@ export const TagSelector = ({ options, selected, onToggle, max }) => (
 // ─── Chef Avatar ────────────────────────────────────────────────────────────
 export const ChefAvatar = ({ name, size = 64 }) => {
   const initials = name.split(' ').map(n => n[0]).join('').slice(0, 2)
-  const colors = ['#C9A84C', '#8B6914', '#D4A843', '#B8860B', '#DAA520']
+  const colors = ['#5E6B3A', '#7A8B4E', '#B8972F', '#8B7A2F', '#6B7B3A']
   const idx = name.split('').reduce((a, c) => a + c.charCodeAt(0), 0) % colors.length
   return (
     <div style={{
       width: size, height: size, borderRadius: '50%',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       background: `linear-gradient(135deg, ${colors[idx]}, ${colors[(idx+1)%colors.length]})`,
-      fontSize: size * 0.35, fontWeight: 800, color: '#0a0a0a', flexShrink: 0, letterSpacing: 1
+      fontSize: size * 0.35, fontWeight: 800, color: '#FFFFFF', flexShrink: 0, letterSpacing: 1
     }}>
       {initials}
     </div>
@@ -155,7 +155,7 @@ export const ProgressBar = ({ step, total }) => (
       <div key={i} style={{
         flex: 1, height: 4, borderRadius: 2, transition: 'all 0.4s ease',
         background: i < step ? 'linear-gradient(90deg, var(--gold), var(--gold-light))'
-          : i === step ? 'rgba(201,168,76,0.4)' : 'rgba(255,255,255,0.08)'
+          : i === step ? 'rgba(184,151,47,0.4)' : 'var(--border)'
       }} />
     ))}
   </div>
@@ -171,7 +171,7 @@ export const SectionHeader = ({ label, title, centered = true }) => (
       }}>{label}</div>
     )}
     <h2 style={{
-      color: '#fff', fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: 300,
+      color: 'var(--text)', fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: 300,
       fontFamily: 'var(--font-display)', lineHeight: 1.3
     }}>{title}</h2>
   </div>
@@ -186,7 +186,7 @@ export const ChefCard = ({ chef, onSelect, showSelect }) => (
       borderRadius: 16, padding: 24, transition: 'all 0.3s',
       cursor: 'default', position: 'relative', overflow: 'hidden'
     }}
-    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(201,168,76,0.3)'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,0,0,0.3)'; }}
+    onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(184,151,47,0.3)'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.08)'; }}
     onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
   >
     {chef.verified && (
@@ -197,7 +197,7 @@ export const ChefCard = ({ chef, onSelect, showSelect }) => (
     <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start', marginBottom: 16 }}>
       <ChefAvatar name={chef.name} size={56} />
       <div style={{ flex: 1 }}>
-        <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#fff' }}>{chef.name}</h3>
+        <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: 'var(--text)' }}>{chef.name}</h3>
         <div style={{ display: 'flex', gap: 6, marginTop: 6, flexWrap: 'wrap' }}>
           {chef.speciality.map(s => <Badge key={s} variant="gold">{s}</Badge>)}
         </div>
@@ -206,10 +206,10 @@ export const ChefCard = ({ chef, onSelect, showSelect }) => (
     <p style={{ color: 'var(--text-secondary)', fontSize: 13, lineHeight: 1.7, margin: '0 0 16px' }}>{chef.bio}</p>
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 16, fontSize: 13, alignItems: 'center' }}>
       <div style={{ color: 'var(--gold)', fontWeight: 700, fontSize: 15 }}>R{chef.rate}/hr</div>
-      <div style={{ color: '#555' }}>·</div>
-      <div style={{ color: '#aaa' }}>Min {chef.minHours}hrs</div>
-      <div style={{ color: '#555' }}>·</div>
-      <div style={{ color: '#aaa' }}>{chef.qualified ? `🎓 ${chef.qualType}` : `🍳 ${chef.qualType}`}</div>
+      <div style={{ color: 'var(--text-dim)' }}>·</div>
+      <div style={{ color: 'var(--text-secondary)' }}>Min {chef.minHours}hrs</div>
+      <div style={{ color: 'var(--text-dim)' }}>·</div>
+      <div style={{ color: 'var(--text-secondary)' }}>{chef.qualified ? `🎓 ${chef.qualType}` : `🍳 ${chef.qualType}`}</div>
     </div>
     <div style={{ marginBottom: 12 }}>
       <StarRating rating={chef.rating} />
@@ -218,14 +218,14 @@ export const ChefCard = ({ chef, onSelect, showSelect }) => (
     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
       {chef.areas.slice(0, 4).map(a => (
         <span key={a} style={{
-          fontSize: 11, color: '#666', background: 'rgba(255,255,255,0.04)',
+          fontSize: 11, color: 'var(--text-muted)', background: 'var(--bg-warm)',
           padding: '3px 10px', borderRadius: 12
         }}>
           📍 {a}
         </span>
       ))}
       {chef.areas.length > 4 && (
-        <span style={{ fontSize: 11, color: '#555', padding: '3px 6px' }}>+{chef.areas.length - 4} more</span>
+        <span style={{ fontSize: 11, color: 'var(--text-dim)', padding: '3px 6px' }}>+{chef.areas.length - 4} more</span>
       )}
     </div>
     {showSelect && (

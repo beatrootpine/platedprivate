@@ -55,7 +55,7 @@ export default function ChefSignup({ go }) {
           <TagSelector options={SPECIALITIES} selected={data.specialities} onToggle={v => toggle('specialities', v)} max={3} />
           <div style={{ color: 'var(--gold)', fontSize: 13, fontWeight: 600, marginTop: 16 }}>
             {data.specialities.length}/3 selected
-            {data.specialities.length === 0 && <span style={{ color: '#666', fontWeight: 400 }}> — pick at least one</span>}
+            {data.specialities.length === 0 && <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}> — pick at least one</span>}
           </div>
         </div>
       ),
@@ -79,7 +79,7 @@ export default function ChefSignup({ go }) {
             <span style={{ color: data.bio.length >= 20 ? 'var(--green)' : '#666' }}>
               {data.bio.length >= 20 ? '✓ Looking great!' : `${20 - data.bio.length} more characters needed`}
             </span>
-            <span style={{ color: '#555' }}>{data.bio.length}/500</span>
+            <span style={{ color: 'var(--text-dim)' }}>{data.bio.length}/500</span>
           </div>
         </div>
       ),
@@ -97,19 +97,19 @@ export default function ChefSignup({ go }) {
             {data.rate && Number(data.rate) > 0 && (
               <div style={{
                 marginTop: 16, padding: 20,
-                background: 'rgba(201,168,76,0.08)', borderRadius: 12,
-                border: '1px solid rgba(201,168,76,0.15)'
+                background: 'var(--gold-dim)', borderRadius: 12,
+                border: '1px solid rgba(184,151,47,0.15)'
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                  <span style={{ color: '#999', fontSize: 13 }}>Your rate</span>
-                  <span style={{ color: '#fff', fontSize: 14 }}>R{Number(data.rate).toLocaleString()}/hr</span>
+                  <span style={{ color: 'var(--text-secondary)', fontSize: 13 }}>Your rate</span>
+                  <span style={{ color: 'var(--text)', fontSize: 14 }}>R{Number(data.rate).toLocaleString()}/hr</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                  <span style={{ color: '#999', fontSize: 13 }}>Platform fee (15%)</span>
-                  <span style={{ color: '#ef5350', fontSize: 14 }}>−R{(Number(data.rate) * PLATFORM_FEE).toFixed(0)}</span>
+                  <span style={{ color: 'var(--text-secondary)', fontSize: 13 }}>Platform fee (15%)</span>
+                  <span style={{ color: 'var(--red)', fontSize: 14 }}>−R{(Number(data.rate) * PLATFORM_FEE).toFixed(0)}</span>
                 </div>
-                <div style={{ borderTop: '1px solid rgba(201,168,76,0.2)', paddingTop: 10, display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#aaa', fontSize: 13, fontWeight: 600 }}>You receive</span>
+                <div style={{ borderTop: '1px solid rgba(184,151,47,0.2)', paddingTop: 10, display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--text-secondary)', fontSize: 13, fontWeight: 600 }}>You receive</span>
                   <span style={{ color: 'var(--gold)', fontSize: 24, fontWeight: 800 }}>
                     R{(Number(data.rate) * (1 - PLATFORM_FEE)).toFixed(0)}/hr
                   </span>
@@ -127,7 +127,7 @@ export default function ChefSignup({ go }) {
                 <button key={h} onClick={() => upd('minHours', h)} style={{
                   flex: 1, padding: '14px 8px', borderRadius: 'var(--radius-sm)',
                   fontSize: 16, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
-                  background: data.minHours === h ? 'rgba(201,168,76,0.2)' : 'rgba(255,255,255,0.03)',
+                  background: data.minHours === h ? 'rgba(184,151,47,0.2)' : 'rgba(255,255,255,0.03)',
                   border: `1px solid ${data.minHours === h ? 'var(--gold)' : 'var(--border-input)'}`,
                   color: data.minHours === h ? 'var(--gold)' : '#888'
                 }}>{h}hrs</button>
@@ -136,8 +136,8 @@ export default function ChefSignup({ go }) {
           </div>
 
           {data.rate && Number(data.rate) > 0 && (
-            <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 10, padding: 16, fontSize: 13, color: '#888', lineHeight: 1.6 }}>
-              💡 <strong style={{ color: '#aaa' }}>Tip:</strong> For a {data.minHours}-hour minimum booking, your client pays <strong style={{ color: '#fff' }}>R{(Number(data.rate) * parseInt(data.minHours)).toLocaleString()}</strong> and you receive <strong style={{ color: 'var(--gold)' }}>R{(Number(data.rate) * parseInt(data.minHours) * (1 - PLATFORM_FEE)).toFixed(0)}</strong>
+            <div style={{ background: 'var(--bg-card)', borderRadius: 10, padding: 16, fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+              💡 <strong style={{ color: 'var(--text-secondary)' }}>Tip:</strong> For a {data.minHours}-hour minimum booking, your client pays <strong style={{ color: 'var(--text)' }}>R{(Number(data.rate) * parseInt(data.minHours)).toLocaleString()}</strong> and you receive <strong style={{ color: 'var(--gold)' }}>R{(Number(data.rate) * parseInt(data.minHours) * (1 - PLATFORM_FEE)).toFixed(0)}</strong>
             </div>
           )}
         </div>
@@ -154,7 +154,7 @@ export default function ChefSignup({ go }) {
           <TagSelector options={SA_AREAS} selected={data.areas} onToggle={v => toggle('areas', v)} />
           <div style={{ color: 'var(--gold)', fontSize: 13, fontWeight: 600, marginTop: 16 }}>
             {data.areas.length} area{data.areas.length !== 1 ? 's' : ''} selected
-            {data.areas.length === 0 && <span style={{ color: '#666', fontWeight: 400 }}> — pick at least one</span>}
+            {data.areas.length === 0 && <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}> — pick at least one</span>}
           </div>
         </div>
       ),
@@ -175,12 +175,12 @@ export default function ChefSignup({ go }) {
               <button key={String(o.val)} onClick={() => upd('qualified', o.val)} style={{
                 padding: 24, borderRadius: 'var(--radius)', cursor: 'pointer',
                 transition: 'all 0.2s', textAlign: 'center',
-                background: data.qualified === o.val ? 'rgba(201,168,76,0.12)' : 'rgba(255,255,255,0.03)',
+                background: data.qualified === o.val ? 'var(--gold-dim)' : 'var(--bg-card)',
                 border: `1px solid ${data.qualified === o.val ? 'var(--gold)' : 'var(--border-input)'}`,
               }}>
                 <div style={{ fontSize: 36, marginBottom: 8 }}>{o.icon}</div>
                 <div style={{ color: data.qualified === o.val ? 'var(--gold)' : '#ccc', fontWeight: 600, fontSize: 15, marginBottom: 6 }}>{o.label}</div>
-                <div style={{ color: '#777', fontSize: 12 }}>{o.desc}</div>
+                <div style={{ color: 'var(--text-muted)', fontSize: 12 }}>{o.desc}</div>
               </button>
             ))}
           </div>
@@ -249,8 +249,8 @@ export default function ChefSignup({ go }) {
               }}
               style={{
                 padding: 28, borderRadius: 'var(--radius)',
-                border: `1px dashed ${data[doc.key] ? 'var(--gold)' : 'rgba(255,255,255,0.15)'}`,
-                background: data[doc.key] ? 'rgba(201,168,76,0.06)' : 'rgba(255,255,255,0.02)',
+                border: `1px dashed ${data[doc.key] ? 'var(--gold)' : 'var(--border-input)'}`,
+                background: data[doc.key] ? 'var(--gold-dim)' : 'var(--bg-card)',
                 cursor: 'pointer', transition: 'all 0.25s', textAlign: 'center'
               }}
             >
@@ -259,21 +259,21 @@ export default function ChefSignup({ go }) {
                 color: data[doc.key] ? 'var(--gold)' : '#fff',
                 fontWeight: 600, fontSize: 15, marginBottom: 6
               }}>{doc.label}</div>
-              <div style={{ color: '#777', fontSize: 13 }}>
+              <div style={{ color: 'var(--text-muted)', fontSize: 13 }}>
                 {data[doc.key] ? doc.uploaded : doc.desc}
               </div>
               {!data[doc.key] && (
                 <div style={{
                   marginTop: 12, padding: '8px 20px', borderRadius: 'var(--radius-pill)',
-                  background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-input)',
-                  color: '#999', fontSize: 13, display: 'inline-block'
+                  background: 'var(--olive-dim)', border: '1px solid var(--border-input)',
+                  color: 'var(--text-secondary)', fontSize: 13, display: 'inline-block'
                 }}>
                   Click to upload
                 </div>
               )}
             </div>
           ))}
-          <p style={{ color: '#555', fontSize: 11, marginTop: 8, lineHeight: 1.7 }}>
+          <p style={{ color: 'var(--text-dim)', fontSize: 11, marginTop: 8, lineHeight: 1.7 }}>
             📎 Accepted: PDF, JPG, PNG (max 10MB each). Your documents are encrypted and used only for verification.
           </p>
         </div>
@@ -295,10 +295,10 @@ export default function ChefSignup({ go }) {
             <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 20 }}>
               <ChefAvatar name={`${data.firstName} ${data.lastName}`} size={60} />
               <div>
-                <h3 style={{ color: '#fff', margin: 0, fontSize: 22, fontFamily: 'var(--font-display)' }}>
+                <h3 style={{ color: 'var(--text)', margin: 0, fontSize: 22, fontFamily: 'var(--font-display)' }}>
                   {data.firstName} {data.lastName}
                 </h3>
-                <div style={{ color: '#888', fontSize: 13, marginTop: 4 }}>{data.city}</div>
+                <div style={{ color: 'var(--text-secondary)', fontSize: 13, marginTop: 4 }}>{data.city}</div>
               </div>
             </div>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16 }}>
@@ -307,14 +307,14 @@ export default function ChefSignup({ go }) {
             <p style={{ color: 'var(--text-secondary)', fontSize: 14, lineHeight: 1.7, marginBottom: 16 }}>{data.bio}</p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, fontSize: 14 }}>
               <span style={{ color: 'var(--gold)', fontWeight: 700 }}>R{data.rate}/hr</span>
-              <span style={{ color: '#777' }}>Min {data.minHours}hrs</span>
-              <span style={{ color: '#aaa' }}>{data.qualified ? `🎓 ${data.qualType}` : `🍳 ${data.qualType}`}</span>
+              <span style={{ color: 'var(--text-muted)' }}>Min {data.minHours}hrs</span>
+              <span style={{ color: 'var(--text-secondary)' }}>{data.qualified ? `🎓 ${data.qualType}` : `🍳 ${data.qualType}`}</span>
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 12 }}>
               {data.areas.slice(0, 5).map(a => (
-                <span key={a} style={{ fontSize: 11, color: '#666', background: 'rgba(255,255,255,0.04)', padding: '3px 10px', borderRadius: 12 }}>📍 {a}</span>
+                <span key={a} style={{ fontSize: 11, color: 'var(--text-muted)', background: 'var(--bg-warm)', padding: '3px 10px', borderRadius: 12 }}>📍 {a}</span>
               ))}
-              {data.areas.length > 5 && <span style={{ fontSize: 11, color: '#555' }}>+{data.areas.length - 5} more</span>}
+              {data.areas.length > 5 && <span style={{ fontSize: 11, color: 'var(--text-dim)' }}>+{data.areas.length - 5} more</span>}
             </div>
             <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
               {data.idUploaded && <Badge variant="green">ID Verified</Badge>}
@@ -322,7 +322,7 @@ export default function ChefSignup({ go }) {
             </div>
           </div>
 
-          <label style={{ display: 'flex', gap: 12, alignItems: 'flex-start', cursor: 'pointer', color: '#999', fontSize: 13, lineHeight: 1.6 }}>
+          <label style={{ display: 'flex', gap: 12, alignItems: 'flex-start', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: 13, lineHeight: 1.6 }}>
             <input
               type="checkbox"
               checked={data.agreeTerms}
@@ -347,10 +347,10 @@ export default function ChefSignup({ go }) {
       <div style={{ textAlign: 'center', marginBottom: 32 }}>
         <div style={{ fontSize: 44, marginBottom: 12 }}>{current.icon}</div>
         <h1 style={{
-          color: '#fff', fontSize: 'clamp(22px, 4vw, 28px)',
+          color: 'var(--text)', fontSize: 'clamp(22px, 4vw, 28px)',
           fontFamily: 'var(--font-display)', fontWeight: 400, marginBottom: 8
         }}>{current.title}</h1>
-        <p style={{ color: '#888', fontSize: 14 }}>{current.subtitle}</p>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>{current.subtitle}</p>
       </div>
 
       {/* Step content */}

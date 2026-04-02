@@ -47,25 +47,25 @@ export default function AuthModal({ isOpen, onClose, defaultMode = 'login', defa
     <div style={{
       position: 'fixed', inset: 0, zIndex: 200,
       display: 'flex', alignItems: 'center', justifyContent: 'center',
-      background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)',
+      background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(8px)',
       padding: 24
     }} onClick={onClose}>
       <div onClick={e => e.stopPropagation()} style={{
-        background: '#111', border: '1px solid var(--border)',
+        background: '#FFFFFF', border: '1px solid var(--border)',
         borderRadius: 16, padding: 36, width: '100%', maxWidth: 420,
         position: 'relative'
       }}>
         {/* Close */}
         <button onClick={onClose} style={{
           position: 'absolute', top: 16, right: 16, background: 'none',
-          border: 'none', color: '#666', fontSize: 20, cursor: 'pointer'
+          border: 'none', color: '#999', fontSize: 20, cursor: 'pointer'
         }}>✕</button>
 
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
           <Logo size="sm" />
           <h2 style={{
-            color: '#fff', fontSize: 22, fontFamily: 'var(--font-display)',
+            color: 'var(--text)', fontSize: 22, fontFamily: 'var(--font-display)',
             fontWeight: 400, marginTop: 16
           }}>
             {mode === 'login' ? 'Welcome back' : 'Create your account'}
@@ -82,7 +82,7 @@ export default function AuthModal({ isOpen, onClose, defaultMode = 'login', defa
               <button key={r.val} onClick={() => setRole(r.val)} style={{
                 flex: 1, padding: '14px 12px', borderRadius: 'var(--radius-sm)',
                 cursor: 'pointer', transition: 'all 0.2s', textAlign: 'center',
-                background: role === r.val ? 'rgba(201,168,76,0.12)' : 'rgba(255,255,255,0.03)',
+                background: role === r.val ? 'rgba(184,151,47,0.12)' : 'rgba(255,255,255,0.03)',
                 border: `1px solid ${role === r.val ? 'var(--gold)' : 'var(--border-input)'}`,
               }}>
                 <div style={{ fontSize: 20, marginBottom: 4 }}>{r.label}</div>

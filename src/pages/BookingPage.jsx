@@ -116,20 +116,20 @@ export default function BookingPage({ go }) {
         </div>
         <div style={{
           width: 64, height: 64, margin: '0 auto 28px',
-          border: '3px solid rgba(201,168,76,0.2)', borderTopColor: 'var(--gold)',
+          border: '3px solid rgba(184,151,47,0.2)', borderTopColor: 'var(--gold)',
           borderRadius: '50%', animation: 'spin 1s linear infinite'
         }} />
         <h2 style={{
-          color: '#fff', fontFamily: 'var(--font-display)',
+          color: 'var(--text)', fontFamily: 'var(--font-display)',
           fontWeight: 300, fontSize: 28, marginBottom: 12
         }}>Finding your perfect chefs...</h2>
-        <p style={{ color: '#888' }}>
+        <p style={{ color: 'var(--text-secondary)' }}>
           Matching based on {booking.cuisine.length > 0 ? booking.cuisine.join(', ') : 'your preferences'},
           {' '}{booking.area || 'your area'}, and availability
         </p>
         <div style={{
           margin: '36px auto', width: 240, height: 3,
-          background: 'rgba(255,255,255,0.08)', borderRadius: 2, overflow: 'hidden'
+          background: 'var(--border)', borderRadius: 2, overflow: 'hidden'
         }}>
           <div style={{
             width: '40%', height: '100%',
@@ -147,10 +147,10 @@ export default function BookingPage({ go }) {
       <div className="container page-top">
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <h1 style={{
-            color: '#fff', fontSize: 'clamp(26px, 4vw, 34px)',
+            color: 'var(--text)', fontSize: 'clamp(26px, 4vw, 34px)',
             fontFamily: 'var(--font-display)', fontWeight: 300, marginBottom: 12
           }}>Your Chef Matches</h1>
-          <p style={{ color: '#888', fontSize: 14 }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>
             📅 {booking.date} · ⏰ {booking.time} · 👥 {booking.guests} guests
             · ⏱ {booking.hours} hours
             {booking.cuisine.length > 0 && ` · 🍽️ ${booking.cuisine.join(', ')}`}
@@ -168,9 +168,9 @@ export default function BookingPage({ go }) {
             ))}
           </div>
         ) : (
-          <div style={{ textAlign: 'center', padding: '60px 24px', color: '#888' }}>
+          <div style={{ textAlign: 'center', padding: '60px 24px', color: 'var(--text-secondary)' }}>
             <div style={{ fontSize: 48, marginBottom: 16 }}>😔</div>
-            <h3 style={{ color: '#fff', fontWeight: 400, fontFamily: 'var(--font-display)', marginBottom: 8 }}>
+            <h3 style={{ color: 'var(--text)', fontWeight: 400, fontFamily: 'var(--font-display)', marginBottom: 8 }}>
               No chefs available for your criteria
             </h3>
             <p style={{ marginBottom: 24 }}>Try adjusting your area, hours, or cuisine preferences</p>
@@ -196,10 +196,10 @@ export default function BookingPage({ go }) {
       }}>
         <div style={{ fontSize: 64, marginBottom: 20 }}>🎉</div>
         <h1 style={{
-          color: '#fff', fontSize: 32,
+          color: 'var(--text)', fontSize: 32,
           fontFamily: 'var(--font-display)', fontWeight: 300, marginBottom: 8
         }}>Booking Confirmed!</h1>
-        <p style={{ color: '#888', marginBottom: 32 }}>
+        <p style={{ color: 'var(--text-secondary)', marginBottom: 32 }}>
           Your request has been sent to {selectedChef.name}. They'll confirm within 2 hours.
         </p>
 
@@ -211,8 +211,8 @@ export default function BookingPage({ go }) {
           <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 20 }}>
             <ChefAvatar name={selectedChef.name} size={52} />
             <div>
-              <div style={{ color: '#fff', fontWeight: 600, fontSize: 16 }}>{selectedChef.name}</div>
-              <div style={{ color: '#888', fontSize: 13 }}>{selectedChef.speciality.join(' · ')}</div>
+              <div style={{ color: 'var(--text)', fontWeight: 600, fontSize: 16 }}>{selectedChef.name}</div>
+              <div style={{ color: 'var(--text-secondary)', fontSize: 13 }}>{selectedChef.speciality.join(' · ')}</div>
             </div>
           </div>
 
@@ -229,8 +229,8 @@ export default function BookingPage({ go }) {
               { label: 'Rate', val: `R${selectedChef.rate}/hr` },
             ].map(r => (
               <div key={r.label}>
-                <span style={{ color: '#666' }}>{r.label}: </span>
-                <span style={{ color: '#fff' }}>{r.val}</span>
+                <span style={{ color: 'var(--text-muted)' }}>{r.label}: </span>
+                <span style={{ color: 'var(--text)' }}>{r.val}</span>
               </div>
             ))}
           </div>
@@ -240,7 +240,7 @@ export default function BookingPage({ go }) {
             borderTop: '1px solid var(--border-light)', marginTop: 24, paddingTop: 20,
             display: 'flex', justifyContent: 'space-between', alignItems: 'center'
           }}>
-            <span style={{ color: '#999', fontSize: 14 }}>Total Estimate</span>
+            <span style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Total Estimate</span>
             <span style={{ color: 'var(--gold)', fontSize: 32, fontWeight: 800, fontFamily: 'var(--font-display)' }}>
               R{total.toLocaleString()}
             </span>
@@ -261,10 +261,10 @@ export default function BookingPage({ go }) {
   return (
     <div className="container-sm page-top">
       <h1 style={{
-        color: '#fff', fontSize: 'clamp(26px, 4vw, 32px)',
+        color: 'var(--text)', fontSize: 'clamp(26px, 4vw, 32px)',
         fontFamily: 'var(--font-display)', fontWeight: 300, marginBottom: 8
       }}>Book a Private Chef</h1>
-      <p style={{ color: '#888', marginBottom: 36, fontSize: 15 }}>
+      <p style={{ color: 'var(--text-secondary)', marginBottom: 36, fontSize: 15 }}>
         Tell us about your event and we'll match you with 3 perfect chefs
       </p>
 
@@ -292,7 +292,7 @@ export default function BookingPage({ go }) {
               <button key={g} onClick={() => upd('guests', g)} style={{
                 flex: '1 1 60px', padding: '11px 4px', borderRadius: 'var(--radius-sm)',
                 fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
-                background: booking.guests === g ? 'rgba(201,168,76,0.2)' : 'rgba(255,255,255,0.03)',
+                background: booking.guests === g ? 'rgba(184,151,47,0.2)' : 'rgba(255,255,255,0.03)',
                 border: `1px solid ${booking.guests === g ? 'var(--gold)' : 'var(--border-input)'}`,
                 color: booking.guests === g ? 'var(--gold)' : '#888'
               }}>{g}</button>
@@ -310,7 +310,7 @@ export default function BookingPage({ go }) {
               <button key={h} onClick={() => upd('hours', h)} style={{
                 flex: '1 1 60px', padding: '11px 4px', borderRadius: 'var(--radius-sm)',
                 fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
-                background: booking.hours === h ? 'rgba(201,168,76,0.2)' : 'rgba(255,255,255,0.03)',
+                background: booking.hours === h ? 'rgba(184,151,47,0.2)' : 'rgba(255,255,255,0.03)',
                 border: `1px solid ${booking.hours === h ? 'var(--gold)' : 'var(--border-input)'}`,
                 color: booking.hours === h ? 'var(--gold)' : '#888'
               }}>{h}hrs</button>
@@ -337,7 +337,7 @@ export default function BookingPage({ go }) {
       >
         Find My Perfect Chef →
       </GoldButton>
-      <p style={{ textAlign: 'center', color: '#555', fontSize: 12, marginTop: 12 }}>
+      <p style={{ textAlign: 'center', color: 'var(--text-dim)', fontSize: 12, marginTop: 12 }}>
         No payment required at this stage. You'll only pay once your chef confirms.
       </p>
     </div>

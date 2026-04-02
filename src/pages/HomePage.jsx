@@ -31,23 +31,30 @@ export default function HomePage({ go }) {
         {/* Ambient glow */}
         <div style={{
           position: 'absolute', inset: 0, opacity: 0.07,
-          background: 'radial-gradient(ellipse 800px 600px at 50% 30%, #C9A84C 0%, transparent 70%)'
+          background: 'radial-gradient(ellipse 800px 600px at 50% 30%, var(--gold) 0%, transparent 70%)'
         }} />
         {/* Subtle grid pattern */}
         <div style={{
           position: 'absolute', inset: 0, opacity: 0.03,
-          backgroundImage: 'linear-gradient(rgba(201,168,76,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.3) 1px, transparent 1px)',
+          backgroundImage: 'linear-gradient(rgba(184,151,47,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(184,151,47,0.3) 1px, transparent 1px)',
           backgroundSize: '60px 60px'
         }} />
 
         <div style={{ position: 'relative', zIndex: 1 }} className="animate-in">
-          {/* Actual Logo — large and centered */}
-          <div style={{ marginBottom: 32, display: 'flex', justifyContent: 'center' }}>
-            <Logo size="xl" />
+          {/* Actual Logo — on dark container for contrast */}
+          <div style={{
+            marginBottom: 32, display: 'flex', justifyContent: 'center'
+          }}>
+            <div style={{
+              background: '#1A1A18', borderRadius: 16, padding: '20px 36px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.08)'
+            }}>
+              <Logo size="xl" />
+            </div>
           </div>
 
           <p style={{
-            fontSize: 'clamp(16px, 3vw, 21px)', color: '#888',
+            fontSize: 'clamp(16px, 3vw, 21px)', color: 'var(--text-secondary)',
             maxWidth: 560, margin: '0 auto 44px', lineHeight: 1.7, fontWeight: 300
           }}>
             South Africa's premier private chef marketplace.<br />
@@ -70,10 +77,10 @@ export default function HomePage({ go }) {
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
           animation: 'pulse 2s infinite'
         }}>
-          <span style={{ color: '#555', fontSize: 11, letterSpacing: 1 }}>SCROLL</span>
-          <svg width="16" height="24" viewBox="0 0 16 24" fill="none" stroke="#555" strokeWidth="1.5">
+          <span style={{ color: 'var(--text-muted)', fontSize: 11, letterSpacing: 1 }}>SCROLL</span>
+          <svg width="16" height="24" viewBox="0 0 16 24" fill="none" stroke="var(--text-muted)" strokeWidth="1.5">
             <rect x="1" y="1" width="14" height="22" rx="7" />
-            <circle cx="8" cy="8" r="2" fill="#555" />
+            <circle cx="8" cy="8" r="2" fill="var(--text-muted)" />
           </svg>
         </div>
       </div>
@@ -97,12 +104,12 @@ export default function HomePage({ go }) {
             }}>
               <div style={{
                 position: 'absolute', top: -10, right: -5, fontSize: 80,
-                fontWeight: 900, color: 'rgba(201,168,76,0.06)',
+                fontWeight: 900, color: 'rgba(184,151,47,0.1)',
                 fontFamily: 'var(--font-display)', lineHeight: 1
               }}>{s.num}</div>
               <div style={{ fontSize: 32, marginBottom: 16 }}>{s.icon}</div>
-              <h4 style={{ color: '#fff', fontSize: 17, fontWeight: 600, marginBottom: 10 }}>{s.title}</h4>
-              <p style={{ color: '#888', fontSize: 14, lineHeight: 1.7 }}>{s.desc}</p>
+              <h4 style={{ color: 'var(--text)', fontSize: 17, fontWeight: 600, marginBottom: 10 }}>{s.title}</h4>
+              <p style={{ color: 'var(--text-secondary)', fontSize: 14, lineHeight: 1.7 }}>{s.desc}</p>
             </div>
           ))}
         </div>
@@ -127,21 +134,21 @@ export default function HomePage({ go }) {
 
       {/* ─── For Chefs CTA ────────────────────────────────────── */}
       <div style={{
-        background: 'linear-gradient(135deg, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.02) 100%)',
-        borderTop: '1px solid rgba(201,168,76,0.1)',
-        borderBottom: '1px solid rgba(201,168,76,0.1)',
+        background: 'linear-gradient(135deg, rgba(94,107,58,0.06) 0%, rgba(184,151,47,0.04) 100%)',
+        borderTop: '1px solid var(--border)',
+        borderBottom: '1px solid var(--border)',
         padding: '80px 24px'
       }}>
         <div style={{ maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{
-            color: 'var(--gold)', fontSize: 14, fontWeight: 700,
+            color: 'var(--olive)', fontSize: 14, fontWeight: 700,
             letterSpacing: 3, textTransform: 'uppercase', marginBottom: 8
           }}>For Chefs</h2>
           <h3 style={{
-            color: '#fff', fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: 300,
+            color: 'var(--text)', fontSize: 'clamp(24px, 4vw, 36px)', fontWeight: 300,
             fontFamily: 'var(--font-display)', marginBottom: 16
           }}>Turn your talent into a thriving business</h3>
-          <p style={{ color: '#888', fontSize: 15, lineHeight: 1.7, marginBottom: 32 }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 15, lineHeight: 1.7, marginBottom: 32 }}>
             Whether you're classically trained or self-taught, Plated Private connects you with clients looking for exactly what you offer. Set your own rates, choose your areas, and build your reputation.
           </p>
           <div style={{ display: 'flex', gap: 24, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 32 }}>
@@ -152,7 +159,7 @@ export default function HomePage({ go }) {
             ].map(s => (
               <div key={s.label} style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 28, fontWeight: 800, color: 'var(--gold)', fontFamily: 'var(--font-display)' }}>{s.val}</div>
-                <div style={{ fontSize: 12, color: '#888', marginTop: 4 }}>{s.label}</div>
+                <div style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 4 }}>{s.label}</div>
               </div>
             ))}
           </div>

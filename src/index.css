@@ -1,29 +1,47 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=Playfair+Display:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --gold: #C9A84C;
-  --gold-light: #E8C96A;
-  --gold-dim: rgba(201,168,76,0.15);
-  --gold-border: rgba(201,168,76,0.3);
-  --bg: #0a0a0a;
-  --bg-card: rgba(255,255,255,0.03);
-  --bg-card-hover: rgba(255,255,255,0.05);
-  --border: rgba(255,255,255,0.08);
-  --border-light: rgba(255,255,255,0.06);
-  --border-input: rgba(255,255,255,0.1);
-  --text: #ffffff;
-  --text-secondary: #999999;
-  --text-muted: #777777;
-  --text-dim: #555555;
-  --green: #66bb6a;
-  --green-bg: rgba(76,175,80,0.12);
-  --green-border: rgba(76,175,80,0.25);
-  --red: #ef5350;
-  --red-bg: rgba(244,67,54,0.12);
-  --red-border: rgba(244,67,54,0.25);
-  --blue: #42a5f5;
-  --blue-bg: rgba(66,165,245,0.12);
-  --blue-border: rgba(66,165,245,0.25);
+  /* ─── Brand Palette: Gold + Olive on Warm White ─── */
+  --gold: #B8972F;
+  --gold-light: #D4B44A;
+  --gold-dim: rgba(184,151,47,0.1);
+  --gold-border: rgba(184,151,47,0.25);
+  --olive: #5E6B3A;
+  --olive-light: #7A8B4E;
+  --olive-dim: rgba(94,107,58,0.08);
+  --olive-border: rgba(94,107,58,0.2);
+
+  /* ─── Surfaces ─── */
+  --bg: #FAFAF6;
+  --bg-warm: #F5F3ED;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #FDFCF9;
+  --bg-nav: #1A1A18;
+  --bg-footer: #F0EDE5;
+
+  /* ─── Borders ─── */
+  --border: #E4E0D6;
+  --border-light: #EBE8E0;
+  --border-input: #D5D0C5;
+
+  /* ─── Text ─── */
+  --text: #2A2A26;
+  --text-secondary: #6B6B63;
+  --text-muted: #9C9A90;
+  --text-dim: #B5B3AA;
+
+  /* ─── Status Colors ─── */
+  --green: #4E8B3A;
+  --green-bg: rgba(78,139,58,0.08);
+  --green-border: rgba(78,139,58,0.2);
+  --red: #C4453A;
+  --red-bg: rgba(196,69,58,0.07);
+  --red-border: rgba(196,69,58,0.18);
+  --blue: #3A6E8B;
+  --blue-bg: rgba(58,110,139,0.07);
+  --blue-border: rgba(58,110,139,0.18);
+
+  /* ─── Type & Shape ─── */
   --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-display: 'Playfair Display', Georgia, serif;
   --radius: 12px;
@@ -45,13 +63,13 @@ body {
   line-height: 1.5;
 }
 
-::selection { background: rgba(201,168,76,0.3); color: #fff; }
+::selection { background: rgba(184,151,47,0.25); color: var(--text); }
 
 input::placeholder, textarea::placeholder { color: var(--text-dim); }
 
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.3); border-radius: 3px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: rgba(184,151,47,0.3); border-radius: 3px; }
 
 a { color: inherit; text-decoration: none; }
 
@@ -124,5 +142,6 @@ button { font-family: inherit; }
 
 /* ─── Utility ────────────────────────────────────── */
 .text-gold { color: var(--gold); }
+.text-olive { color: var(--olive); }
 .text-muted { color: var(--text-muted); }
 .font-display { font-family: var(--font-display); }
