@@ -1,0 +1,36 @@
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
+import Nav from './components/Nav'
+import Footer from './components/Footer'
+import HomePage from './pages/HomePage'
+import BrowseChefsPage from './pages/BrowseChefsPage'
+import BookingPage from './pages/BookingPage'
+import ChefSignup from './pages/ChefSignup'
+import AdminDashboard from './pages/AdminDashboard'
+
+function AppContent() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const go = (path) => { navigate(path); window.scrollTo(0, 0) }
+
+  return (
+    <div style={{ background: 'var(--bg)', color: 'var(--text)', minHeight: '100vh', fontFamily: 'var(--font-body)' }}>
+      <Nav currentPath={location.pathname} go={go} />
+      <Routes>
+        <Route path="/" element={<HomePage go={go} />} />
+        <Route path="/chefs" element={<BrowseChefsPage />} />
+        <Route path="/book" element={<BookingPage go={go} />} />
+        <Route path="/join" element={<ChefSignup go={go} />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+      </Routes>
+      <Footer go={go} />
+    </div>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
+    </BrowserRouter>
+  )
+}
