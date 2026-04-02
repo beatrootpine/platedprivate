@@ -194,14 +194,44 @@ export default function BookingPage({ go }) {
         maxWidth: 560, margin: '0 auto', padding: '120px 24px 60px',
         textAlign: 'center'
       }}>
-        <div style={{ fontSize: 64, marginBottom: 20 }}>🎉</div>
+        <div style={{ fontSize: 64, marginBottom: 20 }}>📨</div>
         <h1 style={{
           color: 'var(--text)', fontSize: 32,
           fontFamily: 'var(--font-display)', fontWeight: 300, marginBottom: 8
-        }}>Booking Confirmed!</h1>
+        }}>Booking Request Sent!</h1>
         <p style={{ color: 'var(--text-secondary)', marginBottom: 32 }}>
-          Your request has been sent to {selectedChef.name}. They'll confirm within 2 hours.
+          Your request has been sent to {selectedChef.name}. Here's what happens next:
         </p>
+
+        {/* Next steps */}
+        <div style={{
+          background: 'var(--bg-warm)', borderRadius: 12, padding: 20,
+          marginBottom: 24, textAlign: 'left'
+        }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 14 }}>
+            What Happens Next
+          </div>
+          {[
+            { num: '1', text: 'Chef reviews and accepts your booking request', status: '⏳ Waiting' },
+            { num: '2', text: 'Chef sends a cost estimate (ingredients, travel, extras)', status: '' },
+            { num: '3', text: 'You review and approve the total cost', status: '' },
+            { num: '4', text: 'Booking confirmed — chef prepares for your event!', status: '' },
+          ].map(s => (
+            <div key={s.num} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: '8px 0', borderBottom: '1px solid var(--border-light)' }}>
+              <div style={{
+                width: 24, height: 24, borderRadius: '50%', flexShrink: 0,
+                background: s.num === '1' ? 'var(--gold)' : 'var(--border)',
+                color: s.num === '1' ? '#fff' : 'var(--text-muted)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 12, fontWeight: 700
+              }}>{s.num}</div>
+              <div style={{ flex: 1 }}>
+                <span style={{ color: 'var(--text)', fontSize: 13 }}>{s.text}</span>
+                {s.status && <span style={{ color: 'var(--gold)', fontSize: 12, marginLeft: 8, fontWeight: 600 }}>{s.status}</span>}
+              </div>
+            </div>
+          ))}
+        </div>
 
         <div style={{
           background: 'var(--bg-card)', borderRadius: 16, padding: 32,
@@ -240,16 +270,19 @@ export default function BookingPage({ go }) {
             borderTop: '1px solid var(--border-light)', marginTop: 24, paddingTop: 20,
             display: 'flex', justifyContent: 'space-between', alignItems: 'center'
           }}>
-            <span style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Total Estimate</span>
+            <span style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Service Fee Estimate</span>
             <span style={{ color: 'var(--gold)', fontSize: 32, fontWeight: 800, fontFamily: 'var(--font-display)' }}>
               R{total.toLocaleString()}
             </span>
           </div>
+          <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 8 }}>
+            Final total will include ingredients, travel, and extras once the chef sends their cost estimate.
+          </div>
         </div>
 
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 32 }}>
+          <GoldButton onClick={() => go('/dashboard')}>View My Bookings</GoldButton>
           <GoldButton onClick={() => go('/')} variant="outline">Back to Home</GoldButton>
-          <GoldButton onClick={() => { setStep(0); setSelectedChef(null) }}>Book Another Chef</GoldButton>
         </div>
       </div>
     )

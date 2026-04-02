@@ -17,9 +17,8 @@ export default function Nav({ currentPath, go }) {
     links.push({ path: '/book', label: 'Book a Chef' })
     links.push({ path: '/join', label: 'Register as a Chef' })
   } else if (isAdmin) {
-    // Admin sees everything
+    // Admin sees dashboard + admin panel
     links.push({ path: '/dashboard', label: 'My Dashboard' })
-    links.push({ path: '/book', label: 'Book a Chef' })
     links.push({ path: '/admin', label: 'Admin' })
   } else if (isChef) {
     // Chef sees their dashboard
