@@ -4,6 +4,7 @@ import { MOCK_CHEFS, MOCK_BOOKINGS, PLATFORM_FEE } from '../data/constants'
 import { useAuth } from '../context/AuthContext'
 import { getAdminBookings, getAdminRevenue, getAdminChefs, suspendChef, reactivateChef, removeChef as removeChefApi, claimAdmin } from '../lib/api'
 import { normalizeAdminChef } from '../lib/helpers'
+import { supabase } from '../lib/supabase'
 
 export default function AdminDashboard() {
   const { user, isAdmin, refreshProfile } = useAuth()
@@ -278,8 +279,39 @@ export default function AdminDashboard() {
               <div className="admin-row-actions" style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
                 <div className="admin-row-badges" style={{ display: 'flex', gap: 6 }}>
                   <Badge variant={c.verified ? 'green' : 'grey'}>{c.verified ? 'Verified' : 'Unverified'}</Badge>
-                  <Badge variant={c.available ? 'blue' : 'red'}>{c.available ? 'Active' : 'Suspended'}</Badge>
+                  <Badge variant={c.available ? 'blue' : c.status === 'pending_review' ? 'gold' : 'red'}>
+                    {c.status === 'pending_review' ? 'Pending Review' : c.available ? 'Active' : 'Suspended'}
+                  </Badge>
                 </div>
+                {/* Verify / Unverify */}
+                <button onClick={async () => {
+                  try {
+                    await supabase.from('chefs').update({ is_verified: !c.verified, verified_at: !c.verified ? new Date().toISOString() : null }).eq('id', c.id)
+                  } catch(e) {}
+                  setChefs(prev => prev.map(ch => ch.id === c.id ? { ...ch, verified: !ch.verified } : ch))
+                }} style={{
+                  background: c.verified ? 'var(--olive-dim)' : 'var(--green-bg)',
+                  border: `1px solid ${c.verified ? 'var(--olive-border)' : 'var(--green-border)'}`,
+                  color: c.verified ? 'var(--olive)' : 'var(--green)',
+                  padding: '7px 16px', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer'
+                }}>
+                  {c.verified ? '✕ Unverify' : '✓ Verify'}
+                </button>
+                {/* Approve (for pending chefs) */}
+                {c.status === 'pending_review' && (
+                  <button onClick={async () => {
+                    try {
+                      await supabase.from('chefs').update({ status: 'active', is_available: true }).eq('id', c.id)
+                    } catch(e) {}
+                    setChefs(prev => prev.map(ch => ch.id === c.id ? { ...ch, status: 'active', available: true } : ch))
+                  }} style={{
+                    background: 'var(--green-bg)', border: '1px solid var(--green-border)',
+                    color: 'var(--green)', padding: '7px 16px', borderRadius: 6,
+                    fontSize: 12, fontWeight: 600, cursor: 'pointer'
+                  }}>
+                    ✓ Approve
+                  </button>
+                )}
                 <button onClick={() => toggleChef(c.id)} style={{
                   background: c.available ? 'var(--red-bg)' : 'var(--green-bg)',
                   border: `1px solid ${c.available ? 'var(--red-border)' : 'var(--green-border)'}`,
