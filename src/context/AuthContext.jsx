@@ -45,6 +45,10 @@ export function AuthProvider({ children }) {
       password,
       options: { data: { first_name: firstName, last_name: lastName, role } }
     })
+    // Trigger hardcodes 'client' — update role if chef was selected
+    if (!error && data?.user && role !== 'client') {
+      await supabase.from('profiles').update({ role }).eq('id', data.user.id)
+    }
     return { data, error }
   }
 

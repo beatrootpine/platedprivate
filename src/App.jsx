@@ -6,6 +6,7 @@ import HomePage from './pages/HomePage'
 import BrowseChefsPage from './pages/BrowseChefsPage'
 import BookingPage from './pages/BookingPage'
 import ChefSignup from './pages/ChefSignup'
+import ChefDashboard from './pages/ChefDashboard'
 import AdminDashboard from './pages/AdminDashboard'
 
 function AppContent() {
@@ -21,6 +22,7 @@ function AppContent() {
         <Route path="/chefs" element={<BrowseChefsPage />} />
         <Route path="/book" element={<BookingPage go={go} />} />
         <Route path="/join" element={<ChefSignup go={go} />} />
+        <Route path="/dashboard" element={<ChefDashboard go={go} />} />
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
       <Footer go={go} />
