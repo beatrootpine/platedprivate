@@ -409,3 +409,85 @@ export async function claimAdmin(setupKey) {
   if (error) return { success: false, error: error.message }
   return { success: true, error: null }
 }
+
+
+// ─────────────────────────────────────────────────────────────────────
+// BOOKING ESTIMATES (ingredients, travel, extras)
+// ─────────────────────────────────────────────────────────────────────
+
+export async function getEstimateByBooking(bookingId) {
+  const { data, error } = await supabase
+    .from('booking_estimates')
+    .select('*')
+    .eq('booking_id', bookingId)
+    .order('revision_number', { ascending: false })
+    .limit(1)
+    .single()
+  return { data, error }
+}
+
+export async function getEstimateItems(estimateId) {
+  const { data, error } = await supabase
+    .from('estimate_items')
+    .select('*')
+    .eq('estimate_id', estimateId)
+    .order('sort_order')
+  return { data, error }
+}
+
+export async function createEstimate(estimateData) {
+  const { data, error } = await supabase
+    .from('booking_estimates')
+    .insert(estimateData)
+    .select()
+    .single()
+  return { data, error }
+}
+
+export async function updateEstimate(estimateId, updates) {
+  const { data, error } = await supabase
+    .from('booking_estimates')
+    .update(updates)
+    .eq('id', estimateId)
+    .select()
+    .single()
+  return { data, error }
+}
+
+export async function addEstimateItem(item) {
+  const { data, error } = await supabase
+    .from('estimate_items')
+    .insert(item)
+    .select()
+    .single()
+  return { data, error }
+}
+
+export async function removeEstimateItem(itemId) {
+  const { error } = await supabase
+    .from('estimate_items')
+    .delete()
+    .eq('id', itemId)
+  return { error }
+}
+
+// Chef submits estimate to client
+export async function submitEstimate(estimateId) {
+  return updateEstimate(estimateId, { status: 'submitted' })
+}
+
+// Client approves estimate
+export async function approveEstimate(estimateId) {
+  return updateEstimate(estimateId, {
+    status: 'approved',
+    approved_at: new Date().toISOString()
+  })
+}
+
+// Client requests revision
+export async function requestEstimateRevision(estimateId, clientNotes) {
+  return updateEstimate(estimateId, {
+    status: 'revision_requested',
+    client_notes: clientNotes
+  })
+}
