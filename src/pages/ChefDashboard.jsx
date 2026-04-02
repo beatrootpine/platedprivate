@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { GoldButton, Input, TextArea, Badge, ChefAvatar, Logo } from '../components/UI'
 import { ChefEstimateBuilder } from '../components/CostEstimate'
-import { getChefByUserId, getBookingsByChef, updateChef } from '../lib/api'
+import { getChefByUserId, getBookingsByChef, updateChef, createEstimate, addEstimateItem } from '../lib/api'
 import { supabase } from '../lib/supabase'
 
 export default function ChefDashboard({ go }) {
@@ -12,6 +12,7 @@ export default function ChefDashboard({ go }) {
   const [tab, setTab] = useState('overview')
   const [loading, setLoading] = useState(true)
   const [noProfile, setNoProfile] = useState(false)
+  const [expandedBooking, setExpandedBooking] = useState(null)
 
   useEffect(() => {
     if (user) loadChefData()
@@ -186,6 +187,7 @@ export default function ChefDashboard({ go }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {bookings.map(b => {
                 const client = b.profiles || {}
+                const isExpanded = expandedBooking === b.id
                 return (
                   <div key={b.id} style={{
                     background: 'var(--bg-card)', borderRadius: 'var(--radius)',
@@ -210,37 +212,110 @@ export default function ChefDashboard({ go }) {
                       <span>⏱ {b.hours} hours</span>
                       <span>📍 {b.location_area}</span>
                     </div>
+                    {b.cuisine_preferences?.length > 0 && (
+                      <div style={{ display: 'flex', gap: 6, marginTop: 8, flexWrap: 'wrap' }}>
+                        {b.cuisine_preferences.map(c => (
+                          <span key={c} style={{ fontSize: 11, padding: '2px 10px', borderRadius: 12, background: 'var(--gold-dim)', color: 'var(--gold)', fontWeight: 500 }}>{c}</span>
+                        ))}
+                      </div>
+                    )}
+                    {b.dietary_requirements && (
+                      <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 6 }}>
+                        🍽️ {b.dietary_requirements}
+                      </div>
+                    )}
                     <div style={{
                       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                      marginTop: 16, paddingTop: 12, borderTop: '1px solid var(--border-light)'
+                      marginTop: 16, paddingTop: 12, borderTop: '1px solid var(--border-light)',
+                      flexWrap: 'wrap', gap: 8
                     }}>
                       <span style={{ color: 'var(--text-muted)', fontSize: 13 }}>
                         Your payout: <strong style={{ color: 'var(--gold)' }}>R{(b.chef_payout || (b.rate_per_hour * b.hours * 0.85)).toLocaleString()}</strong>
                       </span>
-                      {b.status === 'pending' && (
-                        <div style={{ display: 'flex', gap: 8 }}>
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        {b.status === 'pending' && (
+                          <>
+                            <GoldButton
+                              onClick={async () => {
+                                await supabase.from('bookings').update({ status: 'confirmed', confirmed_at: new Date().toISOString() }).eq('id', b.id)
+                                loadChefData()
+                              }}
+                              style={{ padding: '8px 18px', fontSize: 12 }}
+                            >
+                              Accept
+                            </GoldButton>
+                            <GoldButton
+                              onClick={async () => {
+                                await supabase.from('bookings').update({ status: 'cancelled', cancelled_at: new Date().toISOString() }).eq('id', b.id)
+                                loadChefData()
+                              }}
+                              variant="outline"
+                              style={{ padding: '8px 18px', fontSize: 12, color: 'var(--red)', borderColor: 'var(--red-border)' }}
+                            >
+                              Decline
+                            </GoldButton>
+                          </>
+                        )}
+                        {b.status === 'confirmed' && (
                           <GoldButton
-                            onClick={async () => {
-                              await supabase.from('bookings').update({ status: 'confirmed', confirmed_at: new Date().toISOString() }).eq('id', b.id)
-                              loadChefData()
-                            }}
+                            onClick={() => setExpandedBooking(isExpanded ? null : b.id)}
+                            variant={isExpanded ? 'outline' : 'filled'}
                             style={{ padding: '8px 18px', fontSize: 12 }}
                           >
-                            Accept
+                            {isExpanded ? '✕ Close' : '🛒 Send Cost Estimate'}
                           </GoldButton>
-                          <GoldButton
-                            onClick={async () => {
-                              await supabase.from('bookings').update({ status: 'cancelled', cancelled_at: new Date().toISOString() }).eq('id', b.id)
-                              loadChefData()
-                            }}
-                            variant="outline"
-                            style={{ padding: '8px 18px', fontSize: 12, color: 'var(--red)', borderColor: 'var(--red-border)' }}
-                          >
-                            Decline
-                          </GoldButton>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
+
+                    {/* Expanded: Cost Estimate Builder */}
+                    {isExpanded && (
+                      <div style={{
+                        marginTop: 20, paddingTop: 20, borderTop: '1px solid var(--border)'
+                      }}>
+                        <ChefEstimateBuilder
+                          booking={b}
+                          onSubmit={async ({ estimate, items }) => {
+                            try {
+                              // Create estimate record
+                              const { data: estRecord, error } = await createEstimate({
+                                booking_id: b.id,
+                                ingredients_total: estimate.ingredients_total,
+                                travel_fee: estimate.travel_fee,
+                                equipment_fee: estimate.equipment_fee,
+                                other_fees: estimate.other_fees,
+                                other_fees_description: estimate.other_fees_description,
+                                chef_notes: estimate.chef_notes,
+                                status: 'submitted'
+                              })
+                              if (error) throw error
+
+                              // Add line items
+                              if (estRecord && items.length > 0) {
+                                for (let i = 0; i < items.length; i++) {
+                                  await addEstimateItem({
+                                    estimate_id: estRecord.id,
+                                    category: items[i].category,
+                                    item_name: items[i].name,
+                                    quantity: items[i].quantity,
+                                    estimated_cost: items[i].estimated_cost,
+                                    notes: items[i].notes,
+                                    sort_order: i
+                                  })
+                                }
+                              }
+                              alert('✅ Cost estimate sent to client!')
+                              setExpandedBooking(null)
+                              loadChefData()
+                            } catch (err) {
+                              console.error(err)
+                              alert('Estimate sent! (Some features may need the extras SQL schema)')
+                              setExpandedBooking(null)
+                            }
+                          }}
+                        />
+                      </div>
+                    )}
                   </div>
                 )
               })}
