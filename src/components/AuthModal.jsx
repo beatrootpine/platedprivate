@@ -1,15 +1,25 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { GoldButton, Input, Logo } from './UI'
 
 export default function AuthModal({ isOpen, onClose, defaultMode = 'login', defaultRole = 'client' }) {
   const { signIn, signUp } = useAuth()
-  const [mode, setMode] = useState(defaultMode) // 'login' or 'signup'
+  const [mode, setMode] = useState(defaultMode)
   const [role, setRole] = useState(defaultRole)
   const [form, setForm] = useState({ email: '', password: '', firstName: '', lastName: '' })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState('')
+
+  // Sync mode/role when modal opens with new defaults
+  useEffect(() => {
+    if (isOpen) {
+      setMode(defaultMode)
+      setRole(defaultRole)
+      setError('')
+      setSuccess('')
+    }
+  }, [isOpen, defaultMode, defaultRole])
 
   const upd = (f, v) => setForm(p => ({ ...p, [f]: v }))
 
@@ -66,10 +76,13 @@ export default function AuthModal({ isOpen, onClose, defaultMode = 'login', defa
           <Logo size="sm" />
           <h2 style={{
             color: 'var(--text)', fontSize: 22, fontFamily: 'var(--font-display)',
-            fontWeight: 400, marginTop: 16
+            fontWeight: 600, marginTop: 16
           }}>
-            {mode === 'login' ? 'Welcome back' : 'Create your account'}
+            {mode === 'login' ? 'Welcome Back' : 'Join Plated Private'}
           </h2>
+          <p style={{ color: 'var(--text-muted)', fontSize: 13, marginTop: 6 }}>
+            {mode === 'login' ? 'Sign in to your account' : 'Create a new account to get started'}
+          </p>
         </div>
 
         {/* Role selector (signup only) */}
